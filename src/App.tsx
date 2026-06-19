@@ -15,12 +15,12 @@ export default function App() {
       <div className="relative z-10 w-full max-w-[420px] min-h-[100dvh] sm:min-h-0 sm:h-[860px] flex flex-col mx-auto px-5 sm:px-6 py-6 sm:py-9 sm:rounded-[2.5rem] sm:bg-white/60 sm:backdrop-blur-xl sm:border sm:border-[#2AABEE]/15 sm:shadow-[0_30px_80px_-20px_rgba(42,171,238,0.25)]">
 
         {/* ───────── 1. Header ───────── */}
-        <header className="flex items-center justify-center w-full entrance-fade-up" style={{ animationDelay: '0ms' }}>
+        <header className="relative flex justify-center items-center w-full entrance-fade-up" style={{ animationDelay: '0ms' }}>
           <a
             href={BOT_URL}
-            className="inline-flex items-center gap-2.5 group"
+            className="relative inline-flex items-center group"
           >
-            <div className="w-8 h-8 flex items-center justify-center">
+            <div className="absolute right-full mr-2.5 w-8 h-8 flex items-center justify-center">
               <img src="/yulduzpay_icon.png" alt="YulduzPay" className="w-full h-full object-contain" />
             </div>
             <span className="text-[16px] font-semibold tracking-tight text-[#0F1B2A]">YulduzPay</span>
@@ -31,8 +31,8 @@ export default function App() {
         <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '90ms' }}>
           <h1 className="text-[26px] sm:text-[28px] font-bold tracking-[-0.02em] text-[#0F1B2A] leading-[1.15]">
             Telegram <span className="text-[#2AABEE]">Premium</span>,<br />
-            Stars va Gifts —{' '}
-            <span className="text-[#2AABEE]/70 font-semibold">milliy valyutada.</span>
+            Stars va Gifts<br />
+            <span className="text-[#2AABEE]/70 font-semibold">Milliy valyutada.</span>
           </h1>
           <p className="mt-2 text-[13.5px] font-medium text-[#0F1B2A]/55 leading-relaxed">
             Accountingizni yangi darajaga olib chiqing
@@ -92,8 +92,20 @@ export default function App() {
           </a>
         </section>
 
-        {/* ───────── 4. Trust row (quiet, single line) ───────── */}
-        <section className="w-full mt-5 entrance-fade-up" style={{ animationDelay: '420ms' }}>
+        {/* ───────── 4. CTA (single, no neon) ───────── */}
+        <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '420ms' }}>
+          <a
+            href={BOT_URL}
+            className="group relative w-full flex items-center justify-center gap-2 bg-[#2AABEE] hover:bg-[#1E96DA] text-white font-semibold py-[1.05rem] px-5 rounded-[1.1rem] shadow-[0_10px_30px_-8px_rgba(42,171,238,0.6)] transition-all duration-200 active:scale-[0.98]"
+          >
+            <Sparkles className="w-4 h-4 text-white/95" />
+            <span className="text-[15px] tracking-tight">Xaridni boshlash</span>
+            <ArrowRight className="w-4 h-4 text-white/95 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </a>
+        </section>
+
+        {/* ───────── 5. Trust row (payments below CTA) ───────── */}
+        <section className="w-full mt-5 entrance-fade-up" style={{ animationDelay: '500ms' }}>
           <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#0F1B2A]/60">
             <CreditCard className="w-3.5 h-3.5 text-[#2AABEE] shrink-0" />
             <span className="uppercase tracking-wide">To'lov usullari</span>
@@ -113,18 +125,6 @@ export default function App() {
               <img src="/Card_uzcard_humo.png" alt="Uzcard / Humo" className="h-[16px] w-auto object-contain" />
             </a>
           </div>
-        </section>
-
-        {/* ───────── 5. CTA (thumb zone, single, no neon) ───────── */}
-        <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '500ms' }}>
-          <a
-            href={BOT_URL}
-            className="group relative w-full flex items-center justify-center gap-2 bg-[#2AABEE] hover:bg-[#1E96DA] text-white font-semibold py-[1.05rem] px-5 rounded-[1.1rem] shadow-[0_10px_30px_-8px_rgba(42,171,238,0.6)] transition-all duration-200 active:scale-[0.98]"
-          >
-            <Sparkles className="w-4 h-4 text-white/95" />
-            <span className="text-[15px] tracking-tight">Xaridni boshlash</span>
-            <ArrowRight className="w-4 h-4 text-white/95 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </a>
         </section>
 
       </div>
