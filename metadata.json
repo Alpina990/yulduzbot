@@ -1,0 +1,6 @@
+{
+  "name": "Bot Landing Wireframe",
+  "description": "Telegram premium bot landing page wireframe with placeholder inputs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
