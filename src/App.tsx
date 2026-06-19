@@ -29,7 +29,7 @@ export default function App() {
 
         {/* ───────── 2. Hero ───────── */}
         <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '90ms' }}>
-          <h1 className="text-[26px] sm:text-[28px] font-bold tracking-[-0.02em] text-[#0F1B2A] leading-[1.15]">
+          <h1 className="text-[26px] sm:text-[28px] font-bold tracking-[-0.02em] text-[#0F1B2A] leading-[1.15] text-center">
             Telegram <span className="text-[#2AABEE]">Premium</span>,<br />
             Stars va Gifts <span className="text-[#0F1B2A]">endi</span><br />
             <span className="text-[#2AABEE]/70 font-semibold">Milliy valyutada.</span>
