@@ -1,4 +1,6 @@
 import { Sparkles, ArrowRight, CreditCard } from 'lucide-react';
+import Lottie from 'lottie-react';
+import giftAnimation from '../public/gift.json';
 
 const BOT_URL = 'https://t.me/YulduzPayBot';
 
@@ -13,7 +15,7 @@ export default function App() {
       <div className="relative z-10 w-full max-w-[420px] min-h-[100dvh] sm:min-h-0 sm:h-[860px] flex flex-col mx-auto px-5 sm:px-6 py-6 sm:py-9 sm:rounded-[2.5rem] sm:bg-white/60 sm:backdrop-blur-xl sm:border sm:border-[#2AABEE]/15 sm:shadow-[0_30px_80px_-20px_rgba(42,171,238,0.25)]">
 
         {/* ───────── 1. Header ───────── */}
-        <header className="flex items-center justify-between w-full entrance-fade-up" style={{ animationDelay: '0ms' }}>
+        <header className="flex items-center justify-center w-full entrance-fade-up" style={{ animationDelay: '0ms' }}>
           <a
             href={BOT_URL}
             className="inline-flex items-center gap-2.5 group"
@@ -80,9 +82,12 @@ export default function App() {
             className="entrance-scale-in col-span-1 row-span-1 relative rounded-[1.2rem] overflow-hidden border border-[#FF8FB1]/30 bg-gradient-to-br from-[#FFE8F0] via-[#FFF4F8] to-[#FFFFFF] p-3 flex flex-col items-center justify-center gap-2.5 group transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_6px_20px_-12px_rgba(255,143,177,0.4)]"
             style={{ animationDelay: '340ms' }}
           >
-            <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
-              <video src="/tg_gift.webm" autoPlay loop muted playsInline className="w-full h-full object-contain" />
-            </div>
+            <Lottie
+              animationData={giftAnimation}
+              loop
+              autoplay
+              className="w-12 h-12"
+            />
             <span className="text-[13px] font-bold tracking-[0.12em] text-[#E64380] uppercase">Gifts</span>
           </a>
         </section>
@@ -111,7 +116,7 @@ export default function App() {
         </section>
 
         {/* ───────── 5. CTA (thumb zone, single, no neon) ───────── */}
-        <section className="w-full mt-auto pt-5 entrance-fade-up" style={{ animationDelay: '500ms' }}>
+        <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '500ms' }}>
           <a
             href={BOT_URL}
             className="group relative w-full flex items-center justify-center gap-2 bg-[#2AABEE] hover:bg-[#1E96DA] text-white font-semibold py-[1.05rem] px-5 rounded-[1.1rem] shadow-[0_10px_30px_-8px_rgba(42,171,238,0.6)] transition-all duration-200 active:scale-[0.98]"

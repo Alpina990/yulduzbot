@@ -59,3 +59,21 @@
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, #000 0%, transparent 75%);
   mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, #000 0%, transparent 75%);
 }
+
+/* ============================================================
+   iOS / Safari fixes
+   - Video elements show a black background by default while
+     loading and around transparent frames. Force transparent.
+   - 100dvh fallback for older Safari.
+   ============================================================ */
+video {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific: ensure no default media background */
+  video::-webkit-media-controls-container {
+    background-color: transparent;
+  }
+}
