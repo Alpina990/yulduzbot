@@ -100,8 +100,31 @@ export default function App() {
           </a>
         </section>
 
-        {/* ───────── 4. CTA (single, no neon) ───────── */}
-        <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '420ms' }}>
+        {/* ───────── 4. Trust row (payments above CTA) ───────── */}
+        <section className="w-full mt-5 entrance-fade-up" style={{ animationDelay: '420ms' }}>
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#0F1B2A]/60">
+            <CreditCard className="w-3.5 h-3.5 text-[#2AABEE] shrink-0" />
+            <span className="uppercase tracking-wide">To'lov usullari</span>
+          </div>
+
+          <div className="mt-2.5 grid grid-cols-4 gap-2">
+            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
+              <img src="/click_logo_on_white.svg" alt="Click" className="h-[14px] w-auto object-contain" />
+            </a>
+            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
+              <img src="/payme-logo.svg" alt="Payme" className="h-[15px] w-auto object-contain" />
+            </a>
+            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
+              <img src="/Uzum.svg" alt="Uzum" className="h-[15px] w-auto object-contain" />
+            </a>
+            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
+              <img src="/Card_uzcard_humo.png" alt="Uzcard / Humo" className="h-[16px] w-auto object-contain" />
+            </a>
+          </div>
+        </section>
+
+        {/* ───────── 5. CTA (single, no neon) ───────── */}
+        <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '500ms' }}>
           <a
             href={BOT_URL}
             className="group relative w-full flex items-center justify-center gap-2 bg-[#2AABEE] hover:bg-[#1E96DA] text-white font-semibold py-[1.05rem] px-5 rounded-[1.1rem] shadow-[0_10px_30px_-8px_rgba(42,171,238,0.6)] transition-all duration-200 active:scale-[0.98]"
@@ -139,29 +162,6 @@ export default function App() {
             <span className="relative z-10 text-[15px] tracking-tight">Telegram orqali boshlash</span>
             <ArrowRight className="relative z-10 w-4 h-4 text-white/95 transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>
-        </section>
-
-        {/* ───────── 5. Trust row (payments below CTA) ───────── */}
-        <section className="w-full mt-5 entrance-fade-up" style={{ animationDelay: '500ms' }}>
-          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#0F1B2A]/60">
-            <CreditCard className="w-3.5 h-3.5 text-[#2AABEE] shrink-0" />
-            <span className="uppercase tracking-wide">To'lov usullari</span>
-          </div>
-
-          <div className="mt-2.5 grid grid-cols-4 gap-2">
-            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
-              <img src="/click_logo_on_white.svg" alt="Click" className="h-[14px] w-auto object-contain" />
-            </a>
-            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
-              <img src="/payme-logo.svg" alt="Payme" className="h-[15px] w-auto object-contain" />
-            </a>
-            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
-              <img src="/Uzum.svg" alt="Uzum" className="h-[15px] w-auto object-contain" />
-            </a>
-            <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
-              <img src="/Card_uzcard_humo.png" alt="Uzcard / Humo" className="h-[16px] w-auto object-contain" />
-            </a>
-          </div>
         </section>
 
       </div>
