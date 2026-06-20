@@ -2,7 +2,7 @@ import { Sparkles, ArrowRight, CreditCard } from 'lucide-react';
 import Lottie from 'lottie-react';
 import giftAnimation from '../public/gift.json';
 
-const BOT_URL = 'https://t.me/YulduzPayBot';
+const BOT_URL = 'https://t.me/YulduzPayBot?start=auto';
 
 export default function App() {
   return (
@@ -29,13 +29,13 @@ export default function App() {
 
         {/* ───────── 2. Hero ───────── */}
         <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '90ms' }}>
-          <h1 className="text-[26px] sm:text-[28px] font-bold tracking-[-0.02em] text-[#0F1B2A] leading-[1.15] text-center">
-            Telegram <span className="text-[#2AABEE]">Premium</span>,<br />
+          <h1 className="text-[32px] sm:text-[36px] font-bold tracking-[-0.02em] text-[#0F1B2A] leading-[1.15] text-center">
+            Telegram <span className="text-[#2AABEE]">Premium,</span><br />
             Stars va Gifts <span className="text-[#0F1B2A]">endi</span><br />
-            <span className="text-[#2AABEE]/70 font-semibold">Milliy valyutada.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2AABEE] to-[#007AFF] font-bold tracking-tight">Milliy valyutada.</span>
           </h1>
-          <p className="mt-2 text-[13.5px] font-medium text-[#0F1B2A]/55 leading-relaxed">
-            Accountingizni yangi darajaga olib chiqing
+          <p className="mt-3 text-[14px] font-medium text-[#0F1B2A]/60 leading-relaxed text-center">
+            Akkauntingizni yangi darajaga olib chiqing
           </p>
         </section>
 
@@ -57,11 +57,11 @@ export default function App() {
               <span className="text-[10px] font-bold tracking-[0.15em] text-[#2AABEE] uppercase">Telegram Premium</span>
             </div>
 
-            <div className="relative flex items-center justify-center flex-1 my-2">
-              <img src="/Telegram Premium.svg" alt="Telegram Premium" className="w-[88px] h-[88px] object-contain" />
+            <div className="relative flex items-center justify-center flex-1 my-3">
+              <img src="/Telegram Premium.svg" alt="Telegram Premium" className="w-[96px] h-[96px] object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" />
             </div>
 
-            <div className="relative">
+            <div className="relative mt-1">
               <div className="text-[17px] font-bold tracking-tight text-[#0F1B2A] leading-tight">Cheksiz imkoniyatlar</div>
             </div>
           </a>
