@@ -34,7 +34,7 @@ export default function App() {
         <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '90ms' }}>
           <h1 className="text-[32px] sm:text-[36px] font-bold tracking-[-0.02em] text-[#0F1B2A] leading-[1.15] text-center">
             Telegram <span className="text-[#2AABEE]">Premium,</span><br />
-            Yulduzlar va Sovg'alar <span className="text-[#0F1B2A]">endi</span><br />
+            Yulduzlar va Sovg'alar<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2AABEE] to-[#007AFF] font-bold tracking-tight">Milliy valyutada!</span>
           </h1>
           <p className="mt-3 text-[14px] font-medium text-[#0F1B2A]/60 leading-relaxed text-center">
