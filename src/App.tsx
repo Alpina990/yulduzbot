@@ -3,7 +3,9 @@ import Lottie from 'lottie-react';
 import giftAnimation from './gift.json';
 import starAnimation from './star.json';
 
-const BOT_URL = 'https://t.me/YulduzPayBot?start=auto';
+const BOT_URL = import.meta.env.VITE_BOT_URL || 'https://t.me/YulduzPayBot?start=auto';
+const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'YulduzPay';
+const LOGO_PATH = `/${BRAND_NAME.toLowerCase()}_icon.png`;
 
 export default function App() {
   return (
@@ -22,9 +24,9 @@ export default function App() {
             className="relative inline-flex items-center group"
           >
             <div className="absolute right-full mr-2.5 w-8 h-8 flex items-center justify-center">
-              <img src="/yulduzpay_icon.png" alt="YulduzPay" className="w-full h-full object-contain" />
+              <img src={LOGO_PATH} alt={BRAND_NAME} className="w-full h-full object-contain" />
             </div>
-            <span className="text-[16px] font-semibold tracking-tight text-[#0F1B2A]">YulduzPay</span>
+            <span className="text-[16px] font-semibold tracking-tight text-[#0F1B2A]">{BRAND_NAME}</span>
           </a>
         </header>
 
@@ -55,7 +57,7 @@ export default function App() {
             <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-[#2AABEE]/15 blur-2xl pointer-events-none" />
 
             <div className="relative flex items-center">
-              <span className="text-[10px] font-bold tracking-[0.15em] text-[#2AABEE] uppercase">Telegram Premium</span>
+              <span className="text-[13px] font-bold tracking-[0.12em] text-[#2AABEE] uppercase">Premium</span>
             </div>
 
             <div className="relative flex items-center justify-center flex-1 my-3">
