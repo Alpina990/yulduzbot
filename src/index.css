@@ -99,11 +99,19 @@
 }
 
 .animate-sparkle {
-  /* Fast appear, slow disappear handled by keyframe percentages */
   animation: yp-sparkle 1.6s infinite;
 }
-.animate-sparkle-delayed {
-  animation: yp-sparkle 1.6s infinite 0.8s;
+.animate-sparkle-delay-1 {
+  animation: yp-sparkle 1.5s infinite 0.4s;
+}
+.animate-sparkle-delay-2 {
+  animation: yp-sparkle 1.8s infinite 0.9s;
+}
+.animate-sparkle-delay-3 {
+  animation: yp-sparkle 1.4s infinite 1.2s;
+}
+.animate-sparkle-delay-4 {
+  animation: yp-sparkle 1.7s infinite 0.2s;
 }
 
 /* Premium hairline grid texture overlay (very subtle, no neon) — light variant */

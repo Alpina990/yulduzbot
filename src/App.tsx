@@ -34,7 +34,7 @@ export default function App() {
         <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '90ms' }}>
           <h1 className="text-[32px] sm:text-[36px] font-bold tracking-[-0.02em] text-[#0F1B2A] leading-[1.15] text-center">
             Telegram <span className="text-[#2AABEE]">Premium,</span><br />
-            Stars va Gifts <span className="text-[#0F1B2A]">endi</span><br />
+            Yulduzlar va Sovg'alar <span className="text-[#0F1B2A]">endi</span><br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2AABEE] to-[#007AFF] font-bold tracking-tight">Milliy valyutada!</span>
           </h1>
           <p className="mt-3 text-[14px] font-medium text-[#0F1B2A]/60 leading-relaxed text-center">
@@ -111,11 +111,25 @@ export default function App() {
               <div className="absolute inset-0 w-[60%] bg-gradient-to-r from-transparent via-white/80 to-transparent animate-shine" />
             </div>
 
-            {/* Sparkle effects inside the button */}
+            {/* Multiple random-sized sparkle effects */}
+            {/* Normal/Large (left) */}
             <svg viewBox="0 0 24 24" fill="currentColor" className="absolute top-[18%] left-[8%] w-[1.1rem] h-[1.1rem] text-white animate-sparkle pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
               <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" />
             </svg>
-            <svg viewBox="0 0 24 24" fill="currentColor" className="absolute bottom-[18%] right-[8%] w-[0.8rem] h-[0.8rem] text-white/90 animate-sparkle-delayed pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
+            {/* Normal (right) */}
+            <svg viewBox="0 0 24 24" fill="currentColor" className="absolute bottom-[20%] right-[8%] w-[0.9rem] h-[0.9rem] text-white/90 animate-sparkle-delay-2 pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
+              <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" />
+            </svg>
+            {/* Small (top right) */}
+            <svg viewBox="0 0 24 24" fill="currentColor" className="absolute top-[25%] right-[25%] w-[0.6rem] h-[0.6rem] text-white/80 animate-sparkle-delay-1 pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
+              <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" />
+            </svg>
+            {/* Tiny (bottom left) */}
+            <svg viewBox="0 0 24 24" fill="currentColor" className="absolute bottom-[15%] left-[22%] w-[0.4rem] h-[0.4rem] text-white/70 animate-sparkle-delay-3 pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
+              <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" />
+            </svg>
+            {/* Medium (mid left) */}
+            <svg viewBox="0 0 24 24" fill="currentColor" className="absolute top-[55%] left-[12%] w-[0.7rem] h-[0.7rem] text-white/90 animate-sparkle-delay-4 pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
               <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" />
             </svg>
 
