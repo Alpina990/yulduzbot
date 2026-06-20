@@ -106,11 +106,24 @@ export default function App() {
             href={BOT_URL}
             className="group relative w-full flex items-center justify-center gap-2 bg-[#2AABEE] hover:bg-[#1E96DA] text-white font-semibold py-[1.05rem] px-5 rounded-[1.1rem] shadow-[0_10px_30px_-8px_rgba(42,171,238,0.6)] transition-all duration-200 active:scale-[0.98]"
           >
-            <svg viewBox="0 0 100 100" className="w-[18px] h-[18px] fill-current text-white/95">
+            {/* Shimmer effect wrapper (clipped) */}
+            <div className="absolute inset-0 overflow-hidden rounded-[1.1rem] pointer-events-none">
+              <div className="absolute inset-0 w-[60%] bg-gradient-to-r from-transparent via-white/80 to-transparent animate-shine" />
+            </div>
+
+            {/* Sparkle effects inside the button */}
+            <svg viewBox="0 0 24 24" fill="currentColor" className="absolute top-[18%] left-[8%] w-[1.1rem] h-[1.1rem] text-white animate-sparkle pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
+              <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" />
+            </svg>
+            <svg viewBox="0 0 24 24" fill="currentColor" className="absolute bottom-[18%] right-[8%] w-[0.8rem] h-[0.8rem] text-white/90 animate-sparkle-delayed pointer-events-none z-20 drop-shadow-[0_0_2px_rgba(255,255,255,0.6)]">
+              <path d="M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z" />
+            </svg>
+
+            <svg viewBox="0 0 100 100" className="relative z-10 w-[18px] h-[18px] fill-current text-white/95">
               <path d="M88.723,12.142C76.419,17.238,23.661,39.091,9.084,45.047c-9.776,3.815-4.053,7.392-4.053,7.392    s8.345,2.861,15.499,5.007c7.153,2.146,10.968-0.238,10.968-0.238l33.62-22.652c11.922-8.107,9.061-1.431,6.199,1.431    c-6.199,6.2-16.452,15.975-25.036,23.844c-3.815,3.338-1.908,6.199-0.238,7.63c6.199,5.246,23.129,15.976,24.082,16.691    c5.037,3.566,14.945,8.699,16.452-2.146c0,0,5.961-37.435,5.961-37.435c1.908-12.637,3.815-24.321,4.053-27.659    C97.307,8.804,88.723,12.142,88.723,12.142z"/>
             </svg>
-            <span className="text-[15px] tracking-tight">Telegram orqali boshlash</span>
-            <ArrowRight className="w-4 h-4 text-white/95 transition-transform duration-200 group-hover:translate-x-0.5" />
+            <span className="relative z-10 text-[15px] tracking-tight">Telegram orqali boshlash</span>
+            <ArrowRight className="relative z-10 w-4 h-4 text-white/95 transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>
         </section>
 

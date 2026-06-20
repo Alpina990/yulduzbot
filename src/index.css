@@ -81,6 +81,31 @@
   }
 }
 
+/* Shiny button effect */
+@keyframes yp-shine {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  80%, 100% { transform: translateX(250%) skewX(-20deg); }
+}
+
+.animate-shine {
+  /* Fast start, slow finish */
+  animation: yp-shine 2s infinite cubic-bezier(0.1, 1, 0.4, 1);
+}
+
+/* Sparkle twinkle effect */
+@keyframes yp-sparkle {
+  0%, 70%, 100% { opacity: 0; transform: scale(0); }
+  10% { opacity: 1; transform: scale(1); }
+}
+
+.animate-sparkle {
+  /* Fast appear, slow disappear handled by keyframe percentages */
+  animation: yp-sparkle 1.6s infinite;
+}
+.animate-sparkle-delayed {
+  animation: yp-sparkle 1.6s infinite 0.8s;
+}
+
 /* Premium hairline grid texture overlay (very subtle, no neon) — light variant */
 .yp-grid-bg {
   background-image:
