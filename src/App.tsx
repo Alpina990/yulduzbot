@@ -1,6 +1,7 @@
 import { ArrowRight, CreditCard } from 'lucide-react';
 import Lottie from 'lottie-react';
-import giftAnimation from '../public/gift.json';
+import giftAnimation from './gift.json';
+import starAnimation from './star.json';
 
 const BOT_URL = 'https://t.me/YulduzPayBot?start=auto';
 
@@ -72,7 +73,12 @@ export default function App() {
             className="entrance-scale-in col-span-1 row-span-1 relative rounded-[1.2rem] overflow-hidden border border-[#E8B400]/30 bg-gradient-to-br from-[#FFF8DD] via-[#FFFCEF] to-[#FFFFFF] p-3 flex flex-col items-center justify-center gap-2.5 group transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_6px_20px_-12px_rgba(232,180,0,0.4)]"
             style={{ animationDelay: '260ms' }}
           >
-            <img src="/star.svg" alt="Stars" className="w-12 h-12 object-contain" />
+            <Lottie
+              animationData={starAnimation}
+              loop
+              autoplay
+              className="w-[56px] h-[56px] drop-shadow-sm transition-transform duration-300 group-hover:scale-110"
+            />
             <span className="text-[13px] font-bold tracking-[0.12em] text-[#B8860B] uppercase">Stars</span>
           </a>
 
@@ -118,7 +124,7 @@ export default function App() {
               <img src="/click_logo_on_white.svg" alt="Click" className="h-[14px] w-auto object-contain" />
             </a>
             <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
-              <img src="/payme-logo.png" alt="Payme" className="h-[15px] w-auto object-contain" />
+              <img src="/payme-logo.svg" alt="Payme" className="h-[15px] w-auto object-contain" />
             </a>
             <a href={BOT_URL} className="bg-white rounded-lg h-9 flex items-center justify-center px-1 shadow-sm border border-black/[0.04] transition-transform duration-200 hover:scale-105 active:scale-95">
               <img src="/Uzum.svg" alt="Uzum" className="h-[15px] w-auto object-contain" />
