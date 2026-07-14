@@ -3,7 +3,9 @@ import Lottie from 'lottie-react';
 import giftAnimation from './gift.json';
 import starAnimation from './star.json';
 
-const BOT_URL = import.meta.env.VITE_BOT_URL || 'https://t.me/YulduzPayBot?start=auto';
+const BOT_URL = (
+  import.meta.env.VITE_BOT_URL || 'https://telegram.dog/YulduzPayBot?start=auto'
+).replace(/^https?:\/\/(?:www\.)?t\.me\//i, 'https://telegram.dog/');
 const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'YulduzPay';
 const LOGO_PATH = `/${BRAND_NAME.toLowerCase()}_icon.png`;
 
