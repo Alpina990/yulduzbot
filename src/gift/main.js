@@ -128,7 +128,7 @@ const designHeight = 844;
 function fitPageToViewport() {
   const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
 
-  if (viewportWidth <= 600) {
+  if (viewportWidth < 640) {
     pageFit.style.removeProperty("--page-scale");
     return;
   }
