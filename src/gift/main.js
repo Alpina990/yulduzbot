@@ -178,29 +178,39 @@ function mountMedia(card, gift) {
     staticReady = waitForImage(fallback, "is-static-ready");
   }
 
-  if (gift.format === "svg" && gift.asset) {
-    const animation = document.createElement("img");
-    animation.className = "gift-animation";
-    animation.src = assetUrl(gift.asset);
-    animation.alt = "";
-    animation.setAttribute("aria-hidden", "true");
-    container.append(animation);
-    const animationReady = waitForImage(animation, "is-animation-ready");
-    return { staticReady, animationReady };
-  }
-
-  if (gift.format === "webm" && gift.asset) {
+  if (gift.format === "mp4" && gift.asset) {
     const video = document.createElement("video");
-    video.src = assetUrl(gift.asset);
+    video.className = "gift-animation";
+    video.preload = "auto";
     video.autoplay = true;
     video.loop = true;
+    video.defaultMuted = true;
     video.muted = true;
     video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "");
     video.setAttribute("aria-hidden", "true");
+    video.src = assetUrl(gift.asset);
     container.append(video);
+
+    const animationReady = new Promise((resolve) => {
+      const ready = () => {
+        container.classList.add("is-animation-ready");
+        container.classList.remove("is-skeleton");
+        resolve();
+      };
+
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        ready();
+        return;
+      }
+
+      video.addEventListener("loadeddata", ready, { once: true });
+      video.addEventListener("error", resolve, { once: true });
+    });
+
     video.play().catch(() => {});
-    container.classList.remove("is-skeleton");
-    return { staticReady, animationReady: Promise.resolve() };
+    return { staticReady, animationReady };
   }
 
   if (gift.asset) {
@@ -222,8 +232,8 @@ function fallbackGift(id) {
   return {
     id,
     title: "Collectible",
-    format: "svg",
-    asset: `/assets/gifts/${id}.svg`,
+    format: "mp4",
+    asset: `/assets/gifts/${id}.mp4`,
     preview: `/assets/gifts/${id}.png`,
   };
 }
@@ -247,7 +257,7 @@ async function renderGifts() {
   grid.dataset.stage = "static";
   grid.setAttribute("aria-busy", "false");
   Promise.all(mediaStages.map(({ animationReady }) => animationReady)).then(() => {
-    grid.dataset.stage = "svg";
+    grid.dataset.stage = "video";
   });
 }
 

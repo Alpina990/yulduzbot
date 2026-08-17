@@ -308,10 +308,7 @@ a {
 }
 
 .gift-fallback,
-.gift-animation,
-.gift-animation svg,
-.gift-animation canvas,
-.gift-media video {
+.gift-animation {
   position: absolute;
   inset: 0;
   display: block;
@@ -333,6 +330,8 @@ a {
 .gift-animation {
   z-index: 1;
   visibility: hidden;
+  object-fit: contain;
+  background: #fff;
   pointer-events: none;
 }
 
@@ -343,12 +342,6 @@ a {
 .gift-media.is-animation-ready .gift-fallback {
   opacity: 0;
   visibility: hidden;
-}
-
-.gift-animation,
-.gift-animation svg,
-.gift-media video {
-  object-fit: contain;
 }
 
 .gift-media.is-pending {
