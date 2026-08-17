@@ -142,13 +142,6 @@ fitPageToViewport();
 window.addEventListener("resize", fitPageToViewport);
 
 const grid = document.querySelector("#gift-grid");
-const lottieInstances = [];
-let lottiePlayerPromise;
-const animationFrameInterval = 1000 / 30;
-const animationClockStartedAt = performance.now();
-const animationGroupLastFrameAt = [0, 0];
-let animationRenderGroup = 0;
-let animationFrameRequest;
 
 function skeletonCardTemplate() {
   return `
@@ -169,25 +162,12 @@ function cardTemplate(gift, index) {
   `;
 }
 
-function loadLottiePlayer() {
-  if (!lottiePlayerPromise) {
-    lottiePlayerPromise = import("lottie-web/build/player/lottie_light_canvas.js")
-      .then(({ default: player }) => {
-        player.setQuality("medium");
-        return player;
-      });
-  }
-
-  return lottiePlayerPromise;
-}
-
 function mountMedia(card, gift) {
   const container = card.querySelector(".gift-media");
   container.classList.add("is-skeleton");
   let staticReady = Promise.resolve();
-  let animationStarted = false;
 
-  const waitForStaticImage = (image) => new Promise((resolve) => {
+  const waitForImage = (image, readyClass) => new Promise((resolve) => {
     const finish = async () => {
       if (image.naturalWidth > 0) {
         try {
@@ -195,7 +175,7 @@ function mountMedia(card, gift) {
         } catch {
           // The browser can still paint an image when explicit decoding is unavailable.
         }
-        container.classList.add("is-static-ready");
+        container.classList.add(readyClass);
         container.classList.remove("is-skeleton");
       }
       resolve();
@@ -217,48 +197,18 @@ function mountMedia(card, gift) {
     fallback.alt = "";
     fallback.setAttribute("aria-hidden", "true");
     container.append(fallback);
-    staticReady = waitForStaticImage(fallback);
+    staticReady = waitForImage(fallback, "is-static-ready");
   }
 
-  if (gift.format === "tgs" && gift.webAsset) {
-    const animationContainer = document.createElement("span");
-    animationContainer.className = "gift-animation";
-    container.append(animationContainer);
-    return {
-      staticReady,
-      startAnimation: (lottiePlayer) => {
-        if (animationStarted) return;
-        animationStarted = true;
-
-        const markAnimationReady = () => {
-          container.classList.add("is-animation-ready");
-          container.classList.remove("is-skeleton");
-          if (grid.querySelectorAll(".gift-media.is-animation-ready").length === giftIds.length) {
-            grid.dataset.stage = "lottie";
-          }
-        };
-        const instance = lottiePlayer.loadAnimation({
-          container: animationContainer,
-          renderer: "canvas",
-          loop: false,
-          autoplay: false,
-          path: assetUrl(gift.webAsset),
-          rendererSettings: {
-            preserveAspectRatio: "xMidYMid meet",
-            clearCanvas: true,
-            dpr: Math.min(window.devicePixelRatio || 1, 3),
-          },
-        });
-        instance.addEventListener("enterFrame", markAnimationReady);
-        instance.addEventListener("error", () => {
-          container.classList.remove("is-animation-ready");
-        });
-        instance.addEventListener("data_failed", () => {
-          container.classList.remove("is-animation-ready");
-        });
-        lottieInstances.push(instance);
-      },
-    };
+  if (gift.format === "svg" && gift.asset) {
+    const animation = document.createElement("img");
+    animation.className = "gift-animation";
+    animation.src = assetUrl(gift.asset);
+    animation.alt = "";
+    animation.setAttribute("aria-hidden", "true");
+    container.append(animation);
+    const animationReady = waitForImage(animation, "is-animation-ready");
+    return { staticReady, animationReady };
   }
 
   if (gift.format === "webm" && gift.asset) {
@@ -272,7 +222,7 @@ function mountMedia(card, gift) {
     container.append(video);
     video.play().catch(() => {});
     container.classList.remove("is-skeleton");
-    return { staticReady, startAnimation: () => {} };
+    return { staticReady, animationReady: Promise.resolve() };
   }
 
   if (gift.asset) {
@@ -281,47 +231,23 @@ function mountMedia(card, gift) {
     image.src = assetUrl(gift.asset);
     image.alt = "";
     container.append(image);
-    staticReady = waitForStaticImage(image);
-    return { staticReady, startAnimation: () => {} };
+    staticReady = waitForImage(image, "is-static-ready");
+    return { staticReady, animationReady: Promise.resolve() };
   }
 
   container.classList.add("is-pending");
   container.innerHTML = `<span aria-hidden="true">▧</span>`;
-  return { staticReady, startAnimation: () => {} };
+  return { staticReady, animationReady: Promise.resolve() };
 }
 
 function fallbackGift(id) {
   return {
     id,
     title: "Collectible",
-    format: "tgs",
-    webAsset: `/assets/gifts/${id}.json`,
+    format: "svg",
+    asset: `/assets/gifts/${id}.svg`,
     preview: `/assets/gifts/${id}.png`,
   };
-}
-
-function startLottieWhenIdle(mediaStages) {
-  const start = async () => {
-    try {
-      const lottiePlayer = await loadLottiePlayer();
-      mediaStages.forEach(({ startAnimation }, index) => {
-        window.setTimeout(() => startAnimation(lottiePlayer), index * 45);
-      });
-    } catch {
-      // Static PNGs remain visible if the optional animation player cannot load.
-    }
-  };
-
-  // Let the browser present the PNG frame before the larger animation files compete for bandwidth.
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(start, { timeout: 800 });
-      } else {
-        window.setTimeout(start, 250);
-      }
-    });
-  });
 }
 
 async function renderGifts() {
@@ -342,30 +268,13 @@ async function renderGifts() {
   await Promise.all(mediaStages.map(({ staticReady }) => staticReady));
   grid.dataset.stage = "static";
   grid.setAttribute("aria-busy", "false");
-  startLottieWhenIdle(mediaStages);
+  Promise.all(mediaStages.map(({ animationReady }) => animationReady)).then(() => {
+    grid.dataset.stage = "svg";
+  });
 }
 
 renderGifts();
 
-function renderGiftAnimations(now) {
-  if (!document.hidden && now - animationGroupLastFrameAt[animationRenderGroup] >= animationFrameInterval) {
-    const elapsedSeconds = (now - animationClockStartedAt) / 1000;
-    lottieInstances.forEach((instance, index) => {
-      if (index % 2 !== animationRenderGroup) return;
-      if (!instance.isLoaded || !instance.totalFrames) return;
-      const sourceFrame = (elapsedSeconds * instance.frameRate) % instance.totalFrames;
-      instance.goToAndStop(sourceFrame, true);
-    });
-    animationGroupLastFrameAt[animationRenderGroup] = now;
-    animationRenderGroup = animationRenderGroup === 0 ? 1 : 0;
-  }
-  animationFrameRequest = requestAnimationFrame(renderGiftAnimations);
-}
-
-animationFrameRequest = requestAnimationFrame(renderGiftAnimations);
-
 window.addEventListener("beforeunload", () => {
-  cancelAnimationFrame(animationFrameRequest);
   window.removeEventListener("resize", fitPageToViewport);
-  lottieInstances.forEach((instance) => instance.destroy());
 });

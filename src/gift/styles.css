@@ -355,6 +355,7 @@ a {
   visibility: hidden;
 }
 
+.gift-animation,
 .gift-animation svg,
 .gift-media video {
   object-fit: contain;
