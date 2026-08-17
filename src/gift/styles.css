@@ -38,13 +38,13 @@ a {
   isolation: isolate;
   display: flex;
   width: 100%;
-  max-width: 420px;
+  max-width: none;
   height: 100dvh;
   flex: 0 0 auto;
   flex-direction: column;
   margin: 0 auto;
   overflow: hidden;
-  background: #fff;
+  background: linear-gradient(180deg, #eaf4fb 0%, #f4f9fc 55%, #fff 100%);
 }
 
 .ambient-background {
@@ -54,6 +54,7 @@ a {
   overflow: hidden;
   pointer-events: none;
   user-select: none;
+  background: linear-gradient(180deg, #eaf4fb 0%, #f4f9fc 55%, #fff 100%);
 }
 
 .ambient-scene {
@@ -61,6 +62,7 @@ a {
   top: 50%;
   left: 50%;
   width: 100%;
+  max-width: 420px;
   height: 100%;
   min-height: 100%;
   transform: translate(-50%, -50%);
@@ -124,11 +126,13 @@ a {
   z-index: 1;
   display: flex;
   width: 100%;
+  max-width: 420px;
   min-height: 0;
   flex: 0 0 auto;
   flex-direction: column;
   align-items: stretch;
   gap: clamp(8px, 1.8dvh, 18px);
+  margin: 0 auto;
   padding: clamp(14px, 3dvh, 26px) 18px clamp(8px, 1.8dvh, 16px);
 }
 
@@ -453,10 +457,11 @@ a {
   z-index: 4;
   display: flex;
   width: calc(100% - 36px);
+  max-width: 384px;
   flex-direction: column;
   align-items: flex-start;
   gap: clamp(5px, 1dvh, 8px);
-  margin: clamp(8px, 1.8dvh, 16px) 18px clamp(8px, 1.8dvh, 16px);
+  margin: clamp(8px, 1.8dvh, 16px) auto clamp(8px, 1.8dvh, 16px);
 }
 
 .primary-cta {
@@ -625,7 +630,7 @@ a {
   fill: #778591;
 }
 
-@media (min-width: 640px) and (hover: hover) and (pointer: fine) {
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
   #app {
     align-items: center;
     padding: 20px;
