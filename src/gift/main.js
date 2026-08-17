@@ -33,7 +33,6 @@ const giftIds = [
 const app = document.querySelector("#app");
 
 app.innerHTML = `
-  <div class="page-fit">
   <section class="page-shell" aria-labelledby="page-title">
     <div class="ambient-background" aria-hidden="true">
       <div class="ambient-scene">
@@ -118,33 +117,7 @@ app.innerHTML = `
       </p>
     </footer>
   </section>
-  </div>
 `;
-
-const pageFit = document.querySelector(".page-fit");
-const designWidth = 390;
-const designHeight = 844;
-
-function fitPageToViewport() {
-  const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-
-  if (viewportWidth < 640) {
-    pageFit.style.removeProperty("--page-scale");
-    return;
-  }
-
-  const viewportHeight = window.innerHeight;
-  const scale = Math.min(
-    viewportWidth / designWidth,
-    viewportHeight / designHeight,
-    1,
-  );
-
-  pageFit.style.setProperty("--page-scale", String(scale));
-}
-
-fitPageToViewport();
-window.addEventListener("resize", fitPageToViewport);
 
 const grid = document.querySelector("#gift-grid");
 
@@ -280,6 +253,3 @@ async function renderGifts() {
 
 renderGifts();
 
-window.addEventListener("beforeunload", () => {
-  window.removeEventListener("resize", fitPageToViewport);
-});
