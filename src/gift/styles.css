@@ -279,6 +279,10 @@ a {
   transition: transform 180ms ease, filter 180ms ease;
 }
 
+.gift-card--loading {
+  pointer-events: none;
+}
+
 .gift-card:hover,
 .gift-card:focus-visible {
   z-index: 2;
@@ -302,6 +306,17 @@ a {
   box-shadow: 0 3px 10px rgba(21, 91, 125, 0.07);
 }
 
+.gift-media.is-skeleton::before {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  content: "";
+  background:
+    linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.92) 48%, transparent 66%) -160px 0 / 160px 100% no-repeat,
+    linear-gradient(145deg, rgba(216, 239, 249, 0.88), rgba(239, 249, 253, 0.96));
+  animation: gift-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
 .gift-fallback,
 .gift-animation,
 .gift-animation svg,
@@ -316,7 +331,13 @@ a {
 
 .gift-fallback {
   z-index: 0;
+  opacity: 0;
   object-fit: contain;
+  transition: opacity 140ms ease;
+}
+
+.gift-media.is-static-ready .gift-fallback {
+  opacity: 1;
 }
 
 .gift-animation {
@@ -330,6 +351,7 @@ a {
 }
 
 .gift-media.is-animation-ready .gift-fallback {
+  opacity: 0;
   visibility: hidden;
 }
 
@@ -343,6 +365,16 @@ a {
   place-items: center;
   color: #229ed9;
   font-size: 24px;
+}
+
+@keyframes gift-skeleton-shimmer {
+  from {
+    background-position: -160px 0, 0 0;
+  }
+
+  to {
+    background-position: 220px 0, 0 0;
+  }
 }
 
 .payments {

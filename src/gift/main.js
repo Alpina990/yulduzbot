@@ -1,4 +1,3 @@
-import lottie from "lottie-web/build/player/lottie_light_canvas.js";
 import "@fontsource/inter/latin-400.css";
 import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
@@ -7,7 +6,9 @@ import "@fontsource/space-grotesk/latin-700.css";
 import "./styles.css";
 
 const giftPageUrl = (
-  import.meta.env.VITE_BOT_URL || "https://telegram.dog/StarPayBot?start=auto"
+  import.meta.env.VITE_GIFT_BOT_URL ||
+  import.meta.env.VITE_BOT_URL ||
+  "https://telegram.dog/StarPayBot?start=gifts"
 ).replace(/^https?:\/\/(?:www\.)?t\.me\//i, "https://telegram.dog/");
 const assetUrl = (path) => {
   if (!path || /^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith("data:") || path.startsWith("blob:")) {
@@ -16,8 +17,6 @@ const assetUrl = (path) => {
 
   return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
 };
-
-lottie.setQuality("medium");
 
 const giftIds = [
   "5170233102089322756",
@@ -61,7 +60,7 @@ app.innerHTML = `
 
       <section class="collection-panel" aria-labelledby="collection-title">
         <h2 id="collection-title">Kolleksiyalar</h2>
-        <div class="gift-grid" id="gift-grid" aria-live="polite"></div>
+        <div class="gift-grid" id="gift-grid" data-stage="skeleton" aria-busy="true" aria-live="polite"></div>
       </section>
 
       <section class="payments" aria-labelledby="payments-title">
@@ -144,11 +143,22 @@ window.addEventListener("resize", fitPageToViewport);
 
 const grid = document.querySelector("#gift-grid");
 const lottieInstances = [];
+let lottiePlayerPromise;
 const animationFrameInterval = 1000 / 30;
 const animationClockStartedAt = performance.now();
 const animationGroupLastFrameAt = [0, 0];
 let animationRenderGroup = 0;
 let animationFrameRequest;
+
+function skeletonCardTemplate() {
+  return `
+    <span class="gift-card gift-card--loading" aria-hidden="true">
+      <span class="gift-media is-skeleton"></span>
+    </span>
+  `;
+}
+
+grid.innerHTML = giftIds.map(skeletonCardTemplate).join("");
 
 function cardTemplate(gift, index) {
   const title = gift.title || `Gift ${String(index + 1).padStart(2, "0")}`;
@@ -159,8 +169,46 @@ function cardTemplate(gift, index) {
   `;
 }
 
+function loadLottiePlayer() {
+  if (!lottiePlayerPromise) {
+    lottiePlayerPromise = import("lottie-web/build/player/lottie_light_canvas.js")
+      .then(({ default: player }) => {
+        player.setQuality("medium");
+        return player;
+      });
+  }
+
+  return lottiePlayerPromise;
+}
+
 function mountMedia(card, gift) {
   const container = card.querySelector(".gift-media");
+  container.classList.add("is-skeleton");
+  let staticReady = Promise.resolve();
+  let animationStarted = false;
+
+  const waitForStaticImage = (image) => new Promise((resolve) => {
+    const finish = async () => {
+      if (image.naturalWidth > 0) {
+        try {
+          await image.decode();
+        } catch {
+          // The browser can still paint an image when explicit decoding is unavailable.
+        }
+        container.classList.add("is-static-ready");
+        container.classList.remove("is-skeleton");
+      }
+      resolve();
+    };
+
+    if (image.complete) {
+      finish();
+      return;
+    }
+
+    image.addEventListener("load", finish, { once: true });
+    image.addEventListener("error", resolve, { once: true });
+  });
 
   if (gift.preview) {
     const fallback = document.createElement("img");
@@ -169,40 +217,48 @@ function mountMedia(card, gift) {
     fallback.alt = "";
     fallback.setAttribute("aria-hidden", "true");
     container.append(fallback);
+    staticReady = waitForStaticImage(fallback);
   }
 
   if (gift.format === "tgs" && gift.webAsset) {
     const animationContainer = document.createElement("span");
     animationContainer.className = "gift-animation";
     container.append(animationContainer);
-    let animationStarted = false;
-    const markAnimationReady = () => {
-      if (animationStarted) return;
-      animationStarted = true;
-      container.classList.add("is-animation-ready");
-    };
-    const instance = lottie.loadAnimation({
-      container: animationContainer,
-      renderer: "canvas",
-      loop: false,
-      autoplay: false,
-      path: assetUrl(gift.webAsset),
-      rendererSettings: {
-        preserveAspectRatio: "xMidYMid meet",
-        clearCanvas: true,
-        dpr: Math.min(window.devicePixelRatio || 1, 3),
+    return {
+      staticReady,
+      startAnimation: (lottiePlayer) => {
+        if (animationStarted) return;
+        animationStarted = true;
+
+        const markAnimationReady = () => {
+          container.classList.add("is-animation-ready");
+          container.classList.remove("is-skeleton");
+          if (grid.querySelectorAll(".gift-media.is-animation-ready").length === giftIds.length) {
+            grid.dataset.stage = "lottie";
+          }
+        };
+        const instance = lottiePlayer.loadAnimation({
+          container: animationContainer,
+          renderer: "canvas",
+          loop: false,
+          autoplay: false,
+          path: assetUrl(gift.webAsset),
+          rendererSettings: {
+            preserveAspectRatio: "xMidYMid meet",
+            clearCanvas: true,
+            dpr: Math.min(window.devicePixelRatio || 1, 3),
+          },
+        });
+        instance.addEventListener("enterFrame", markAnimationReady);
+        instance.addEventListener("error", () => {
+          container.classList.remove("is-animation-ready");
+        });
+        instance.addEventListener("data_failed", () => {
+          container.classList.remove("is-animation-ready");
+        });
+        lottieInstances.push(instance);
       },
-    });
-    instance.addEventListener("DOMLoaded", markAnimationReady);
-    instance.addEventListener("enterFrame", markAnimationReady);
-    instance.addEventListener("error", () => {
-      container.classList.remove("is-animation-ready");
-    });
-    instance.addEventListener("data_failed", () => {
-      container.classList.remove("is-animation-ready");
-    });
-    lottieInstances.push(instance);
-    return;
+    };
   }
 
   if (gift.format === "webm" && gift.asset) {
@@ -215,7 +271,8 @@ function mountMedia(card, gift) {
     video.setAttribute("aria-hidden", "true");
     container.append(video);
     video.play().catch(() => {});
-    return;
+    container.classList.remove("is-skeleton");
+    return { staticReady, startAnimation: () => {} };
   }
 
   if (gift.asset) {
@@ -224,11 +281,47 @@ function mountMedia(card, gift) {
     image.src = assetUrl(gift.asset);
     image.alt = "";
     container.append(image);
-    return;
+    staticReady = waitForStaticImage(image);
+    return { staticReady, startAnimation: () => {} };
   }
 
   container.classList.add("is-pending");
   container.innerHTML = `<span aria-hidden="true">▧</span>`;
+  return { staticReady, startAnimation: () => {} };
+}
+
+function fallbackGift(id) {
+  return {
+    id,
+    title: "Collectible",
+    format: "tgs",
+    webAsset: `/assets/gifts/${id}.json`,
+    preview: `/assets/gifts/${id}.png`,
+  };
+}
+
+function startLottieWhenIdle(mediaStages) {
+  const start = async () => {
+    try {
+      const lottiePlayer = await loadLottiePlayer();
+      mediaStages.forEach(({ startAnimation }, index) => {
+        window.setTimeout(() => startAnimation(lottiePlayer), index * 45);
+      });
+    } catch {
+      // Static PNGs remain visible if the optional animation player cannot load.
+    }
+  };
+
+  // Let the browser present the PNG frame before the larger animation files compete for bandwidth.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(start, { timeout: 800 });
+      } else {
+        window.setTimeout(start, 250);
+      }
+    });
+  });
 }
 
 async function renderGifts() {
@@ -238,13 +331,18 @@ async function renderGifts() {
     if (!response.ok) throw new Error(`Manifest ${response.status}`);
     manifest = await response.json();
   } catch {
-    manifest = giftIds.map((id) => ({ id, status: "pending" }));
+    manifest = giftIds.map(fallbackGift);
   }
 
   const giftsById = new Map(manifest.map((gift) => [String(gift.id), gift]));
-  const gifts = giftIds.map((id) => giftsById.get(id) || { id, status: "pending" });
+  const gifts = giftIds.map((id) => giftsById.get(id) || fallbackGift(id));
   grid.innerHTML = gifts.map(cardTemplate).join("");
-  [...grid.children].forEach((card, index) => mountMedia(card, gifts[index]));
+  const mediaStages = [...grid.children].map((card, index) => mountMedia(card, gifts[index]));
+
+  await Promise.all(mediaStages.map(({ staticReady }) => staticReady));
+  grid.dataset.stage = "static";
+  grid.setAttribute("aria-busy", "false");
+  startLottieWhenIdle(mediaStages);
 }
 
 renderGifts();

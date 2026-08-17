@@ -23,6 +23,10 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Add a default nginx config for SPA routing (fallback to index.html)
 RUN echo 'server { \
     listen 80; \
+    absolute_redirect off; \
+    location = /gift { \
+        return 308 /gift/$is_args$args; \
+    } \
     location / { \
         root   /usr/share/nginx/html; \
         index  index.html index.htm; \
