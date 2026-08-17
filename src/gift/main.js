@@ -127,12 +127,17 @@ const designHeight = 844;
 
 function fitPageToViewport() {
   const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+
+  if (viewportWidth <= 600) {
+    pageFit.style.removeProperty("--page-scale");
+    return;
+  }
+
   const viewportHeight = window.innerHeight;
-  const mobileMaxScale = viewportWidth <= 600 ? 1.15 : 1;
   const scale = Math.min(
     viewportWidth / designWidth,
     viewportHeight / designHeight,
-    mobileMaxScale,
+    1,
   );
 
   pageFit.style.setProperty("--page-scale", String(scale));
