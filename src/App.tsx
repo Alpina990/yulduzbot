@@ -8,6 +8,8 @@ const BOT_URL = (
 ).replace(/^https?:\/\/(?:www\.)?t\.me\//i, 'https://telegram.dog/');
 const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'YulduzPay';
 const LOGO_PATH = `/${BRAND_NAME.toLowerCase()}_icon.png`;
+const IS_STARPAY = BRAND_NAME.replace(/[\s_-]/g, '').toLowerCase() === 'starpay';
+const GIFTS_URL = IS_STARPAY ? '/gift/' : BOT_URL;
 
 export default function App() {
   return (
@@ -88,7 +90,7 @@ export default function App() {
 
           {/* Gifts — small (1x1) */}
           <a
-            href={BOT_URL}
+            href={GIFTS_URL}
             className="entrance-scale-in col-span-1 row-span-1 relative rounded-[1.2rem] overflow-hidden border border-[#FF8FB1]/30 bg-gradient-to-br from-[#FFE8F0] via-[#FFF4F8] to-[#FFFFFF] p-3 flex flex-col items-center justify-center gap-2.5 group transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_6px_20px_-12px_rgba(255,143,177,0.4)]"
             style={{ animationDelay: '340ms' }}
           >

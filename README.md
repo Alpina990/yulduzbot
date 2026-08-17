@@ -18,3 +18,7 @@ View your app in AI Studio: https://ai.studio/apps/8b30a31c-12d9-4fde-9eee-14a46
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+StarPay rejimini `npm run dev:star` bilan ishga tushiring. Bu rejimda `/gift/`
+Telegram kolleksiyalari landingini ko'rsatadi; YulduzPay rejimida ushbu marshrut
+asosiy sahifaga qaytaradi.
