@@ -166,40 +166,40 @@ function cardTemplate(gift, index) {
 function mountMedia(card, gift) {
   const container = card.querySelector(".gift-media");
   container.classList.add("is-skeleton");
-  let staticReady = Promise.resolve();
 
-  const waitForImage = (image, readyClass) => new Promise((resolve) => {
-    const finish = async () => {
-      if (image.naturalWidth > 0) {
-        try {
-          await image.decode();
-        } catch {
-          // The browser can still paint an image when explicit decoding is unavailable.
-        }
-        container.classList.add(readyClass);
-        container.classList.remove("is-skeleton");
-      }
+  const loadFallback = (src = gift.preview) => new Promise((resolve) => {
+    if (!src) {
+      container.classList.remove("is-skeleton");
       resolve();
-    };
-
-    if (image.complete) {
-      finish();
       return;
     }
 
-    image.addEventListener("load", finish, { once: true });
-    image.addEventListener("error", resolve, { once: true });
-  });
-
-  if (gift.preview) {
     const fallback = document.createElement("img");
     fallback.className = "gift-fallback";
-    fallback.src = assetUrl(gift.preview);
     fallback.alt = "";
     fallback.setAttribute("aria-hidden", "true");
+
+    const finish = async () => {
+      if (fallback.naturalWidth > 0) {
+        try {
+          await fallback.decode();
+        } catch {
+          // The browser can still paint an image when explicit decoding is unavailable.
+        }
+        container.classList.add("is-static-ready");
+      }
+      container.classList.remove("is-skeleton");
+      resolve();
+    };
+
+    fallback.addEventListener("load", finish, { once: true });
+    fallback.addEventListener("error", () => {
+      container.classList.remove("is-skeleton");
+      resolve();
+    }, { once: true });
+    fallback.src = assetUrl(src);
     container.append(fallback);
-    staticReady = waitForImage(fallback, "is-static-ready");
-  }
+  });
 
   if (gift.format === "mp4" && gift.asset) {
     const video = document.createElement("video");
@@ -217,9 +217,21 @@ function mountMedia(card, gift) {
     container.append(video);
 
     const animationReady = new Promise((resolve) => {
+      let settled = false;
+
       const ready = () => {
+        if (settled) return;
+        settled = true;
         container.classList.add("is-animation-ready");
         container.classList.remove("is-skeleton");
+        resolve();
+      };
+
+      const failed = async () => {
+        if (settled) return;
+        settled = true;
+        video.remove();
+        await loadFallback();
         resolve();
       };
 
@@ -229,26 +241,22 @@ function mountMedia(card, gift) {
       }
 
       video.addEventListener("loadeddata", ready, { once: true });
-      video.addEventListener("error", resolve, { once: true });
+      video.addEventListener("error", failed, { once: true });
     });
 
     video.play().catch(() => {});
-    return { staticReady, animationReady };
+    return { staticReady: animationReady, animationReady };
   }
 
   if (gift.asset) {
-    const image = document.createElement("img");
-    image.className = "gift-fallback";
-    image.src = assetUrl(gift.asset);
-    image.alt = "";
-    container.append(image);
-    staticReady = waitForImage(image, "is-static-ready");
+    const staticReady = loadFallback(gift.asset);
     return { staticReady, animationReady: Promise.resolve() };
   }
 
   container.classList.add("is-pending");
+  container.classList.remove("is-skeleton");
   container.innerHTML = `<span aria-hidden="true">▧</span>`;
-  return { staticReady, animationReady: Promise.resolve() };
+  return { staticReady: Promise.resolve(), animationReady: Promise.resolve() };
 }
 
 function fallbackGift(id) {
