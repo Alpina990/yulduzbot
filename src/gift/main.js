@@ -5,6 +5,29 @@ import "@fontsource/inter/latin-700.css";
 import "@fontsource/space-grotesk/latin-700.css";
 import "./styles.css";
 
+// Mobile in-app browsers do not always report `dvh` consistently while their
+// address/tool bars expand and collapse. Keep the landing shell tied to the
+// actually visible viewport so neither the page nor the CTA is cropped.
+const viewport = window.visualViewport;
+let viewportFrame;
+
+function syncViewportHeight() {
+  window.cancelAnimationFrame(viewportFrame);
+  viewportFrame = window.requestAnimationFrame(() => {
+    const visibleHeight = viewport?.height || window.innerHeight;
+    document.documentElement.style.setProperty(
+      "--gift-viewport-height",
+      `${Math.round(visibleHeight)}px`,
+    );
+  });
+}
+
+syncViewportHeight();
+window.addEventListener("resize", syncViewportHeight, { passive: true });
+window.addEventListener("orientationchange", syncViewportHeight, { passive: true });
+window.addEventListener("pageshow", syncViewportHeight, { passive: true });
+viewport?.addEventListener("resize", syncViewportHeight, { passive: true });
+
 const giftPageUrl = (
   import.meta.env.VITE_GIFT_BOT_URL ||
   import.meta.env.VITE_BOT_URL ||
