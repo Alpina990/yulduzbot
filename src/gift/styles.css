@@ -187,12 +187,11 @@ a {
   justify-content: center;
   color: #101820;
   text-decoration: none;
-  transition: transform 160ms ease, opacity 160ms ease;
+  transition: opacity 160ms ease;
 }
 
 .brand-lockup:hover,
 .brand-lockup:focus-visible {
-  transform: translateY(-1px);
   opacity: 0.86;
   outline: none;
 }
@@ -365,7 +364,7 @@ html[data-liquid-glass-mode="live"] .liquid-glass-host {
   border-radius: 16px;
   background: transparent;
   text-decoration: none;
-  transition: transform 180ms ease, filter 180ms ease;
+  transition: filter 180ms ease, outline-color 180ms ease;
 }
 
 .gift-card--loading {
@@ -375,7 +374,6 @@ html[data-liquid-glass-mode="live"] .liquid-glass-host {
 .gift-card:hover,
 .gift-card:focus-visible {
   z-index: 2;
-  transform: translateY(-2px) scale(1.02);
   outline: 2px solid rgba(34, 158, 217, 0.45);
   outline-offset: 1px;
   filter: drop-shadow(0 8px 12px rgba(21, 91, 125, 0.13));
@@ -511,14 +509,14 @@ html[data-liquid-glass-mode="live"] .liquid-glass-host {
   background: transparent;
   outline: 0;
   text-decoration: none;
-  transition: transform 160ms ease, border-color 160ms ease;
+  transition: box-shadow 160ms ease, outline-color 160ms ease;
 }
 
 .payment-card:hover,
 .payment-card:focus-visible {
-  transform: translateY(-2px);
   outline: 1px solid rgba(34, 158, 217, 0.46);
   outline-offset: -1px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
 }
 
 .payment-card img {
@@ -576,8 +574,7 @@ html[data-liquid-glass-mode="live"] .liquid-glass-host {
   background: #229ed9;
   box-shadow: 0 5px 14px rgba(34, 158, 217, 0.17);
   text-decoration: none;
-  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+  transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
     background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -592,14 +589,13 @@ html[data-liquid-glass-mode="live"] .liquid-glass-host {
 
 .primary-cta:hover,
 .primary-cta:focus-visible {
-  transform: translateY(-2px);
   outline: none;
   background: #1e96da;
   box-shadow: 0 9px 20px rgba(34, 158, 217, 0.28);
 }
 
 .primary-cta:active {
-  transform: scale(0.98);
+  background: #1d91cf;
 }
 
 .primary-cta span {
@@ -617,12 +613,6 @@ html[data-liquid-glass-mode="live"] .liquid-glass-host {
   height: 20px;
   flex: 0 0 20px;
   fill: #fff;
-  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.primary-cta:hover .primary-cta__arrow,
-.primary-cta:focus-visible .primary-cta__arrow {
-  transform: translateX(2px);
 }
 
 .primary-cta .primary-cta__sparkle {
