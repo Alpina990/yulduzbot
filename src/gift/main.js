@@ -149,7 +149,7 @@ app.innerHTML = `
 `;
 
 const glassMode = applyGlassMode();
-if (glassMode === "full") {
+if (glassMode === "live") {
   void import("./liquidGlass.js").then(({ mountLiquidGlass }) => {
     mountLiquidGlass(app);
   });

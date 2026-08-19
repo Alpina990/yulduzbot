@@ -1,31 +1,11 @@
-function isBlinkRefractionSupported() {
-  const ua = navigator.userAgent;
-  const hasUAData = navigator.userAgentData != null;
-
-  return hasUAData || (
-    /\b(?:Chrome|Chromium|Edg)\//.test(ua)
-    && !/\b(?:CriOS|EdgiOS|FxiOS|OPiOS)\b/.test(ua)
-    && !/iPhone|iPad|iPod/.test(ua)
-  );
-}
-
 export function resolveGlassMode() {
   const forcedMode = new URLSearchParams(window.location.search).get("glass");
-  if (forcedMode === "full" || forcedMode === "lite") return forcedMode;
+  if (forcedMode === "live" || forcedMode === "full") return "live";
+  if (forcedMode === "baked" || forcedMode === "lite") return "baked";
 
-  if (!isBlinkRefractionSupported()) return "lite";
-
-  const isMobile = navigator.userAgentData?.mobile
-    ?? /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const memory = navigator.deviceMemory;
-  const cores = navigator.hardwareConcurrency;
-  const saveData = navigator.connection?.saveData === true;
-  const constrainedMobile = isMobile && (
-    (typeof memory === "number" && memory <= 4)
-    || (typeof cores === "number" && cores <= 4)
-  );
-
-  return saveData || constrainedMobile ? "lite" : "full";
+  // Production always uses the package-derived baked surfaces. They preserve
+  // the liquid-glass look without a live backdrop filter / displacement pass.
+  return "baked";
 }
 
 export function applyGlassMode() {
