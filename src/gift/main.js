@@ -4,6 +4,7 @@ import "@fontsource/inter/latin-600.css";
 import "@fontsource/inter/latin-700.css";
 import "@fontsource/space-grotesk/latin-700.css";
 import "./styles.css";
+import { applyGlassMode } from "./glassMode.js";
 
 // Mobile in-app browsers do not always report `dvh` consistently while their
 // address/tool bars expand and collapse. Keep the landing shell tied to the
@@ -81,6 +82,7 @@ app.innerHTML = `
       </section>
 
       <section class="collection-panel" aria-labelledby="collection-title">
+        <span class="liquid-glass-host" data-liquid-glass-host="collection" aria-hidden="true"></span>
         <h2 id="collection-title">Kolleksiyalar</h2>
         <div class="gift-grid" id="gift-grid" data-stage="skeleton" aria-busy="true" aria-live="polite"></div>
       </section>
@@ -91,18 +93,22 @@ app.innerHTML = `
         </div>
         <div class="payment-grid">
           <a class="payment-card" href="${giftPageUrl}" aria-label="Click orqali kolleksiya olish">
+            <span class="liquid-glass-host" data-liquid-glass-host="payment" aria-hidden="true"></span>
             <img src="${assetUrl("assets/payments/click.svg")}" alt="Click" />
             <small>Click</small>
           </a>
           <a class="payment-card" href="${giftPageUrl}" aria-label="Payme orqali kolleksiya olish">
+            <span class="liquid-glass-host" data-liquid-glass-host="payment" aria-hidden="true"></span>
             <img src="${assetUrl("assets/payments/payme.png")}" alt="Payme" />
             <small>Payme</small>
           </a>
           <a class="payment-card" href="${giftPageUrl}" aria-label="Uzum orqali kolleksiya olish">
+            <span class="liquid-glass-host" data-liquid-glass-host="payment" aria-hidden="true"></span>
             <img src="${assetUrl("assets/payments/uzum.svg")}" alt="Uzum" />
             <small>Uzum</small>
           </a>
           <a class="payment-card" href="${giftPageUrl}" aria-label="Uzcard yoki Humo orqali kolleksiya olish">
+            <span class="liquid-glass-host" data-liquid-glass-host="payment" aria-hidden="true"></span>
             <img src="${assetUrl("assets/payments/uzcard-humo.png")}" alt="Uzcard va Humo" />
             <small>Uzcard / Humo</small>
           </a>
@@ -141,6 +147,13 @@ app.innerHTML = `
     </footer>
   </section>
 `;
+
+const glassMode = applyGlassMode();
+if (glassMode === "full") {
+  void import("./liquidGlass.js").then(({ mountLiquidGlass }) => {
+    mountLiquidGlass(app);
+  });
+}
 
 const grid = document.querySelector("#gift-grid");
 
