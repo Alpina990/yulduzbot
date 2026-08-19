@@ -3,12 +3,12 @@ import { createRoot } from "react-dom/client";
 import { Glass } from "@samasante/liquid-glass";
 
 const baseOptics = {
-  strength: 0.05,
-  depth: 0.5,
-  curvature: 0.3,
-  bend: 0.45,
+  strength: 0.07,
+  depth: 0.62,
+  curvature: 0.42,
+  bend: 0.65,
   bendWidth: 0.16,
-  dispersion: 0.32,
+  dispersion: 0.42,
   frost: 0,
   saturate: 1,
   sheen: 0.32,
@@ -24,7 +24,15 @@ const baseOptics = {
 
 const variants = {
   collection: {
-    optics: { ...baseOptics, mapSize: 256 },
+    optics: {
+      ...baseOptics,
+      strength: 0.085,
+      depth: 0.72,
+      curvature: 0.52,
+      bend: 0.78,
+      dispersion: 0.5,
+      mapSize: 256,
+    },
     tint: "rgba(255,255,255,0.22)",
   },
   payment: {
