@@ -1,11 +1,35 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, loadEnv} from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({mode}) => {
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
+  const pixelIds = [...new Set(
+    [env.VITE_FB_PIXEL_ID, env.VITE_FB_PIXEL_ADDITIONAL_IDS]
+      .filter(Boolean)
+      .flatMap((value) => value.split(/[\s,]+/))
+      .filter(Boolean),
+  )];
+  if (pixelIds.some((id) => !/^\d+$/.test(id))) {
+    throw new Error('Meta Pixel IDs must contain only digits, separated by commas or spaces.');
+  }
+
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'meta-pixel-ids',
+        transformIndexHtml(html) {
+          return html
+            .replace('%META_PIXEL_IDS%', JSON.stringify(pixelIds))
+            .replace('%META_PIXEL_NOSCRIPT%', pixelIds.map((id) =>
+              `<img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${id}&ev=PageView&noscript=1" />`,
+            ).join('\n'));
+        },
+      },
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

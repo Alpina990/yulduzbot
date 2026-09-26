@@ -23,15 +23,14 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '%VITE_FB_PIXEL_ID%');
-    fbq('track', 'PageView');
+    const pixelIds = %META_PIXEL_IDS%;
+    pixelIds.forEach(function(id) { fbq('init', id); });
+    if (pixelIds.length) fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
   </head>
   <body>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=%VITE_FB_PIXEL_ID%&ev=PageView&noscript=1"
-    /></noscript>
+    <noscript>%META_PIXEL_NOSCRIPT%</noscript>
     <main id="app"></main>
     <script type="module" src="/src/gift-entry.ts"></script>
   </body>
