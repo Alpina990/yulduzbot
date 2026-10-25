@@ -168,6 +168,15 @@ export default function App() {
           </a>
         </section>
 
+        {IS_STARPAY ? (
+          <footer className="w-full mt-5 flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-[#0F1B2A]/45">
+            <a href="/prices" className="hover:text-[#0F1B2A]/70">Narxlar</a>
+            <a href="/terms" className="hover:text-[#0F1B2A]/70">Kelishuv</a>
+            <a href="/privacy" className="hover:text-[#0F1B2A]/70">Maxfiylik</a>
+            <a href="/support" className="hover:text-[#0F1B2A]/70">Yordam</a>
+          </footer>
+        ) : null}
+
       </div>
     </div>
   );
