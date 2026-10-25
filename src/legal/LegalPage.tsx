@@ -13,6 +13,7 @@ import {
   type Company,
   type Lang,
   type PageKey,
+  type Section,
 } from './content';
 
 const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'YulduzPay';
@@ -78,6 +79,17 @@ interface Product {
   isPopular: boolean;
 }
 
+// Page text edited in Admin; the bundled copy in ./content is the fallback.
+interface RemotePage {
+  edition?: string;
+  sections?: Section[];
+  intro?: string;
+  gifts?: string;
+  fees?: string;
+  hours?: string;
+  tip?: string;
+}
+
 const money = (n: number) => `${Math.round(n).toLocaleString('ru-RU')} UZS`;
 
 export default function LegalPage({ page }: { page: PageKey }) {
@@ -88,6 +100,7 @@ export default function LegalPage({ page }: { page: PageKey }) {
   const [stars, setStars] = useState<Product[] | null>(null);
   const [premium, setPremium] = useState<Product[] | null>(null);
   const [showTop, setShowTop] = useState(false);
+  const [remote, setRemote] = useState<{ key: string; content: RemotePage } | null>(null);
   const ui = UI[lang];
 
   useEffect(() => {
@@ -103,6 +116,16 @@ export default function LegalPage({ page }: { page: PageKey }) {
       );
     }
   }, [page]);
+
+  useEffect(() => {
+    let alive = true;
+    void getJson<{ content: RemotePage }>(`/api/v1/public/legal/pages/${page}/${lang}`).then((r) => {
+      if (alive && r?.content) setRemote({ key: `${page}/${lang}`, content: r.content });
+    });
+    return () => {
+      alive = false;
+    };
+  }, [page, lang]);
 
   // The visitor's choice wins; "system" follows the OS, also when it changes.
   useEffect(() => {
@@ -159,7 +182,12 @@ export default function LegalPage({ page }: { page: PageKey }) {
     window.history.replaceState(null, '', url);
   };
 
-  const sections = page === 'privacy' ? PRIVACY[lang] : page === 'terms' ? TERMS[lang] : null;
+  const live = remote?.key === `${page}/${lang}` ? remote.content : null;
+  const bundled = page === 'privacy' ? PRIVACY[lang] : page === 'terms' ? TERMS[lang] : null;
+  const sections = bundled ? (live?.sections?.length ? live.sections : bundled) : null;
+  const edition = live?.edition || EDITION;
+  const pricesText = { ...PRICES_TEXT[lang], ...pick(live, ['intro', 'gifts', 'fees']) };
+  const supportText = { ...SUPPORT_TEXT[lang], ...pick(live, ['intro', 'hours', 'tip']) };
   const themes: Array<{ key: Theme; icon: ReactNode }> = [
     { key: 'light', icon: <Sun className="h-4 w-4" /> },
     { key: 'dark', icon: <Moon className="h-4 w-4" /> },
@@ -249,7 +277,7 @@ export default function LegalPage({ page }: { page: PageKey }) {
             </h1>
             {sections ? (
               <p className="mt-1 text-[13px] text-(--lp-muted)">
-                {ui.updated} {EDITION}
+                {ui.updated} {edition}
               </p>
             ) : null}
 
@@ -271,7 +299,7 @@ export default function LegalPage({ page }: { page: PageKey }) {
             {page === 'prices' ? (
               <div className="mt-5 space-y-7">
                 <p className="text-[15px] leading-relaxed text-(--lp-fg)/80">
-                  {fill(PRICES_TEXT[lang].intro)}
+                  {fill(pricesText.intro)}
                 </p>
                 <PriceTable
                   icon={<Lottie animationData={starAnimation} loop className="h-8 w-8 shrink-0" />}
@@ -310,16 +338,16 @@ export default function LegalPage({ page }: { page: PageKey }) {
                 />
                 <p className="flex items-start gap-3 rounded-2xl bg-(--lp-soft) p-4 text-[15px] leading-relaxed text-(--lp-fg)/80">
                   <Lottie animationData={giftAnimation} loop className="h-9 w-9 shrink-0" />
-                  <span className="pt-1.5">{PRICES_TEXT[lang].gifts}</span>
+                  <span className="pt-1.5">{fill(pricesText.gifts)}</span>
                 </p>
-                <p className="text-[13px] leading-relaxed text-(--lp-muted)">{PRICES_TEXT[lang].fees}</p>
+                <p className="text-[13px] leading-relaxed text-(--lp-muted)">{fill(pricesText.fees)}</p>
                 {BOT_URL ? <PrimaryButton href={BOT_URL} icon={<Send className="h-4 w-4" />}>{ui.buy}</PrimaryButton> : null}
               </div>
             ) : null}
 
             {page === 'support' ? (
               <div className="mt-5 space-y-5 text-[15px] leading-relaxed">
-                <p className="text-(--lp-fg)/80">{SUPPORT_TEXT[lang].intro}</p>
+                <p className="text-(--lp-fg)/80">{fill(supportText.intro)}</p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <ContactCard
                     icon={<Send className="h-5 w-5" />}
@@ -334,8 +362,8 @@ export default function LegalPage({ page }: { page: PageKey }) {
                     href={company.email ? `mailto:${company.email}` : undefined}
                   />
                 </div>
-                <p className="text-(--lp-fg)/80">{SUPPORT_TEXT[lang].hours}</p>
-                <p className="rounded-2xl bg-(--lp-soft) p-4 text-(--lp-fg)/80">{SUPPORT_TEXT[lang].tip}</p>
+                <p className="text-(--lp-fg)/80">{fill(supportText.hours)}</p>
+                <p className="rounded-2xl bg-(--lp-soft) p-4 text-(--lp-fg)/80">{fill(supportText.tip)}</p>
                 <PrimaryButton href={telegramUrl} icon={<Send className="h-4 w-4" />}>
                   {ui.write}
                 </PrimaryButton>
@@ -377,6 +405,15 @@ export default function LegalPage({ page }: { page: PageKey }) {
       ) : null}
     </div>
   );
+}
+
+function pick(src: RemotePage | null, keys: Array<keyof RemotePage>): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const k of keys) {
+    const v = src?.[k];
+    if (typeof v === 'string' && v.trim()) out[k] = v;
+  }
+  return out;
 }
 
 const Segmented = ({ children }: { children: ReactNode }) => (
