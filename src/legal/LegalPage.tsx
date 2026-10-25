@@ -1,8 +1,8 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import Lottie from 'lottie-react';
-import { ArrowUp, Mail, Monitor, Moon, Send, Sun } from 'lucide-react';
-import giftAnimation from '../gift.json';
-import starAnimation from '../star.json';
+import { useEffect, useState, type ReactNode } from "react";
+import Lottie from "lottie-react";
+import { ArrowUp, Mail, Monitor, Moon, Send, Sun } from "lucide-react";
+import giftAnimation from "../gift.json";
+import starAnimation from "../star.json";
 import {
   EDITION,
   PRICES_TEXT,
@@ -14,49 +14,58 @@ import {
   type Lang,
   type PageKey,
   type Section,
-} from './content';
+} from "./content";
 
-const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'YulduzPay';
-const IS_STARPAY = BRAND_NAME.replace(/[\s_-]/g, '').toLowerCase() === 'starpay';
+const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || "YulduzPay";
+const IS_STARPAY =
+  BRAND_NAME.replace(/[\s_-]/g, "").toLowerCase() === "starpay";
 const API_URL = (
-  import.meta.env.VITE_API_URL || (IS_STARPAY ? 'https://api-app.starpay.uz' : '')
-).replace(/\/+$/, '');
-const BOT_URL = (import.meta.env.VITE_BOT_URL || '').replace(
+  import.meta.env.VITE_API_URL ||
+  (IS_STARPAY ? "https://api-app.starpay.uz" : "")
+).replace(/\/+$/, "");
+const BOT_URL = (import.meta.env.VITE_BOT_URL || "").replace(
   /^https?:\/\/(?:www\.)?t\.me\//i,
-  'https://telegram.dog/',
+  "https://telegram.dog/",
 );
 const LOGO_PATH = `/${BRAND_NAME.toLowerCase()}_icon.png`;
 
-export const LEGAL_PAGES: PageKey[] = ['privacy', 'terms', 'prices', 'support'];
-const LANGS: Lang[] = ['ru', 'uz', 'en'];
+export const LEGAL_PAGES: PageKey[] = ["privacy", "terms", "prices", "support"];
+const LANGS: Lang[] = ["ru", "uz", "en"];
 
-type Theme = 'light' | 'dark' | 'system';
-const THEME_KEY = 'sp-legal-theme';
+type Theme = "light" | "dark" | "system";
+const THEME_KEY = "sp-legal-theme";
 
 export const legalPageFromPath = (path: string): PageKey | null => {
-  const key = path.replace(/^\/+|\/+$/g, '') as PageKey;
+  const key = path.replace(/^\/+|\/+$/g, "") as PageKey;
   return LEGAL_PAGES.includes(key) ? key : null;
 };
 
 const pickLang = (): Lang => {
-  const q = new URLSearchParams(window.location.search).get('lang');
-  if (q === 'ru' || q === 'uz' || q === 'en') return q;
+  const q = new URLSearchParams(window.location.search).get("lang");
+  if (q === "ru" || q === "uz" || q === "en") return q;
   const nav = navigator.language.toLowerCase();
-  return nav.startsWith('uz') ? 'uz' : nav.startsWith('en') ? 'en' : 'ru';
+  return nav.startsWith("uz") ? "uz" : nav.startsWith("en") ? "en" : "ru";
 };
 
 const readTheme = (): Theme => {
   try {
     const v = localStorage.getItem(THEME_KEY);
-    return v === 'light' || v === 'dark' ? v : 'system';
+    return v === "light" || v === "dark" ? v : "system";
   } catch {
-    return 'system';
+    return "system";
   }
 };
 
-const systemDark = () => window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+const systemDark = () =>
+  window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
 
-const EMPTY: Company = { name: '', taxId: '', address: '', email: '', telegram: '' };
+const EMPTY: Company = {
+  name: "",
+  taxId: "",
+  address: "",
+  email: "",
+  telegram: "",
+};
 
 async function getJson<T>(path: string): Promise<T | null> {
   if (!API_URL) return null;
@@ -90,67 +99,82 @@ interface RemotePage {
   tip?: string;
 }
 
-const money = (n: number) => `${Math.round(n).toLocaleString('ru-RU')} UZS`;
+const money = (n: number) => `${Math.round(n).toLocaleString("ru-RU")} UZS`;
 
 export default function LegalPage({ page }: { page: PageKey }) {
   const [lang, setLang] = useState<Lang>(pickLang);
   const [theme, setTheme] = useState<Theme>(readTheme);
-  const [dark, setDark] = useState(() => readTheme() === 'dark' || (readTheme() === 'system' && systemDark()));
+  const [dark, setDark] = useState(
+    () => readTheme() === "dark" || (readTheme() === "system" && systemDark()),
+  );
   const [company, setCompany] = useState<Company>(EMPTY);
   const [stars, setStars] = useState<Product[] | null>(null);
   const [premium, setPremium] = useState<Product[] | null>(null);
   const [showTop, setShowTop] = useState(false);
-  const [remote, setRemote] = useState<{ key: string; content: RemotePage } | null>(null);
+  const [remote, setRemote] = useState<{
+    key: string;
+    content: RemotePage | null;
+  } | null>(null);
+  const [companyDone, setCompanyDone] = useState(false);
+  // If the API is slow or down, stop waiting and show the bundled copy.
+  const [gaveUp, setGaveUp] = useState(false);
   const ui = UI[lang];
 
   useEffect(() => {
-    void getJson<{ company?: Company }>('/api/v1/public/legal').then((c) => {
+    void getJson<{ company?: Company }>("/api/v1/public/legal").then((c) => {
       if (c?.company) setCompany(c.company);
+      setCompanyDone(true);
     });
-    if (page === 'prices') {
-      void getJson<{ items: Product[] }>('/api/v1/public/products?type=stars').then((r) =>
-        setStars(r?.items ?? []),
-      );
-      void getJson<{ items: Product[] }>('/api/v1/public/products?type=premium').then((r) =>
-        setPremium(r?.items ?? []),
-      );
+    if (page === "prices") {
+      void getJson<{ items: Product[] }>(
+        "/api/v1/public/products?type=stars",
+      ).then((r) => setStars(r?.items ?? []));
+      void getJson<{ items: Product[] }>(
+        "/api/v1/public/products?type=premium",
+      ).then((r) => setPremium(r?.items ?? []));
     }
   }, [page]);
 
   useEffect(() => {
     let alive = true;
-    void getJson<{ content: RemotePage }>(`/api/v1/public/legal/pages/${page}/${lang}`).then((r) => {
-      if (alive && r?.content) setRemote({ key: `${page}/${lang}`, content: r.content });
+    setGaveUp(false);
+    const timer = window.setTimeout(() => alive && setGaveUp(true), 3000);
+    void getJson<{ content: RemotePage }>(
+      `/api/v1/public/legal/pages/${page}/${lang}`,
+    ).then((r) => {
+      if (alive)
+        setRemote({ key: `${page}/${lang}`, content: r?.content ?? null });
     });
     return () => {
       alive = false;
+      window.clearTimeout(timer);
     };
   }, [page, lang]);
 
   // The visitor's choice wins; "system" follows the OS, also when it changes.
   useEffect(() => {
     try {
-      if (theme === 'system') localStorage.removeItem(THEME_KEY);
+      if (theme === "system") localStorage.removeItem(THEME_KEY);
       else localStorage.setItem(THEME_KEY, theme);
     } catch {
       /* storage blocked: the choice just lasts for this visit */
     }
-    if (theme !== 'system') {
-      setDark(theme === 'dark');
+    if (theme !== "system") {
+      setDark(theme === "dark");
       return;
     }
-    const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
+    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
     setDark(mq?.matches ?? false);
     const on = (e: MediaQueryListEvent) => setDark(e.matches);
-    mq?.addEventListener('change', on);
-    return () => mq?.removeEventListener('change', on);
+    mq?.addEventListener("change", on);
+    return () => mq?.removeEventListener("change", on);
   }, [theme]);
 
   // On phones the menu is one scrollable row: bring the open page into view.
   useEffect(() => {
     document
       .querySelector('nav [aria-current="page"]')
-      ?.scrollIntoView({ inline: 'center', block: 'nearest' });
+      ?.scrollIntoView({ inline: "center", block: "nearest" });
   }, [page]);
 
   useEffect(() => {
@@ -160,12 +184,12 @@ export default function LegalPage({ page }: { page: PageKey }) {
 
   useEffect(() => {
     const on = () => setShowTop(window.scrollY > 600);
-    window.addEventListener('scroll', on, { passive: true });
-    return () => window.removeEventListener('scroll', on);
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
   }, []);
 
-  const telegram = company.telegram || (IS_STARPAY ? '@StarPay_help' : '');
-  const telegramUrl = `https://t.me/${telegram.replace(/^@/, '')}`;
+  const telegram = company.telegram || (IS_STARPAY ? "@StarPay_help" : "");
+  const telegramUrl = `https://t.me/${telegram.replace(/^@/, "")}`;
   const fill = (text: string) =>
     text
       .replace(/\{brand\}/g, BRAND_NAME)
@@ -178,31 +202,49 @@ export default function LegalPage({ page }: { page: PageKey }) {
   const switchLang = (l: Lang) => {
     setLang(l);
     const url = new URL(window.location.href);
-    url.searchParams.set('lang', l);
-    window.history.replaceState(null, '', url);
+    url.searchParams.set("lang", l);
+    window.history.replaceState(null, "", url);
   };
 
   const live = remote?.key === `${page}/${lang}` ? remote.content : null;
-  const bundled = page === 'privacy' ? PRIVACY[lang] : page === 'terms' ? TERMS[lang] : null;
-  const sections = bundled ? (live?.sections?.length ? live.sections : bundled) : null;
+  const ready = (companyDone && remote?.key === `${page}/${lang}`) || gaveUp;
+  const bundled =
+    page === "privacy" ? PRIVACY[lang] : page === "terms" ? TERMS[lang] : null;
+  const sections = bundled
+    ? live?.sections?.length
+      ? live.sections
+      : bundled
+    : null;
   const edition = live?.edition || EDITION;
-  const pricesText = { ...PRICES_TEXT[lang], ...pick(live, ['intro', 'gifts', 'fees']) };
-  const supportText = { ...SUPPORT_TEXT[lang], ...pick(live, ['intro', 'hours', 'tip']) };
+  const pricesText = {
+    ...PRICES_TEXT[lang],
+    ...pick(live, ["intro", "gifts", "fees"]),
+  };
+  const supportText = {
+    ...SUPPORT_TEXT[lang],
+    ...pick(live, ["intro", "hours", "tip"]),
+  };
   const themes: Array<{ key: Theme; icon: ReactNode }> = [
-    { key: 'light', icon: <Sun className="h-4 w-4" /> },
-    { key: 'dark', icon: <Moon className="h-4 w-4" /> },
-    { key: 'system', icon: <Monitor className="h-4 w-4" /> },
+    { key: "light", icon: <Sun className="h-4 w-4" /> },
+    { key: "dark", icon: <Moon className="h-4 w-4" /> },
+    { key: "system", icon: <Monitor className="h-4 w-4" /> },
   ];
 
   return (
     <div
-      className={`lp ${dark ? 'lp-dark' : ''} min-h-[100dvh] w-full bg-linear-to-b from-(--lp-bg-from) to-(--lp-bg-to) font-sans text-(--lp-fg) transition-colors`}
+      className={`lp ${dark ? "lp-dark" : ""} min-h-[100dvh] w-full bg-linear-to-b from-(--lp-bg-from) to-(--lp-bg-to) font-sans text-(--lp-fg) transition-colors`}
     >
       <div className="mx-auto w-full max-w-[1040px] px-5 py-6 sm:py-10">
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <a href="/" className="inline-flex items-center gap-2.5">
-            <img src={LOGO_PATH} alt={BRAND_NAME} className="h-8 w-8 shrink-0 object-contain" />
-            <span className="text-[16px] font-semibold tracking-tight">{BRAND_NAME}</span>
+            <img
+              src={LOGO_PATH}
+              alt={BRAND_NAME}
+              className="h-8 w-8 shrink-0 object-contain"
+            />
+            <span className="text-[16px] font-semibold tracking-tight">
+              {BRAND_NAME}
+            </span>
           </a>
           <div className="flex items-center gap-2">
             <Segmented>
@@ -219,8 +261,15 @@ export default function LegalPage({ page }: { page: PageKey }) {
             </Segmented>
             <Segmented>
               {LANGS.map((l) => (
-                <SegButton key={l} active={l === lang} label={l.toUpperCase()} onClick={() => switchLang(l)}>
-                  <span className="text-[12px] font-semibold uppercase">{l}</span>
+                <SegButton
+                  key={l}
+                  active={l === lang}
+                  label={l.toUpperCase()}
+                  onClick={() => switchLang(l)}
+                >
+                  <span className="text-[12px] font-semibold uppercase">
+                    {l}
+                  </span>
                 </SegButton>
               ))}
             </Segmented>
@@ -237,11 +286,11 @@ export default function LegalPage({ page }: { page: PageKey }) {
                   <a
                     key={p}
                     href={`/${p}?lang=${lang}`}
-                    aria-current={active ? 'page' : undefined}
+                    aria-current={active ? "page" : undefined}
                     className={`shrink-0 rounded-full px-4 py-2 text-[14px] font-medium whitespace-nowrap transition-colors md:rounded-2xl md:py-2.5 md:whitespace-normal md:leading-snug ${
                       active
-                        ? 'bg-(--lp-accent) text-white shadow-[0_8px_20px_-8px_rgba(42,171,238,0.7)]'
-                        : 'bg-(--lp-card) text-(--lp-muted) shadow-sm hover:bg-(--lp-accent)/10 hover:text-(--lp-fg) md:bg-transparent md:shadow-none'
+                        ? "bg-(--lp-accent) text-white shadow-[0_8px_20px_-8px_rgba(42,171,238,0.7)]"
+                        : "bg-(--lp-card) text-(--lp-muted) shadow-sm hover:bg-(--lp-accent)/10 hover:text-(--lp-fg) md:bg-transparent md:shadow-none"
                     }`}
                   >
                     {ui.nav[p]}
@@ -271,125 +320,179 @@ export default function LegalPage({ page }: { page: PageKey }) {
             ) : null}
           </aside>
 
-          <main className="rounded-3xl bg-(--lp-card) p-6 shadow-[0_20px_60px_-25px_rgba(42,171,238,0.35)] sm:p-9">
-            <h1 className="text-[26px] font-bold leading-tight tracking-tight sm:text-[30px]">
-              {ui.nav[page]}
-            </h1>
-            {sections ? (
-              <p className="mt-1 text-[13px] text-(--lp-muted)">
-                {ui.updated} {edition}
-              </p>
-            ) : null}
+          <main
+            aria-busy={!ready}
+            className="rounded-3xl bg-(--lp-card) p-6 shadow-[0_20px_60px_-25px_rgba(42,171,238,0.35)] sm:p-9"
+          >
+            {!ready ? (
+              <PageSkeleton />
+            ) : (
+              <div className="lp-fade-in">
+                <h1 className="text-[26px] font-bold leading-tight tracking-tight sm:text-[30px]">
+                  {ui.nav[page]}
+                </h1>
+                {sections ? (
+                  <p className="mt-1 text-[13px] text-(--lp-muted)">
+                    {ui.updated} {edition}
+                  </p>
+                ) : null}
 
-            {sections ? (
-              <div className="mt-6 max-w-[68ch] space-y-7">
-                {sections.map((s, i) => (
-                  <section key={s.title} id={`s${i + 1}`} className="scroll-mt-6">
-                    <h2 className="mb-2 text-[17px] font-semibold">{s.title}</h2>
-                    {s.body.map((p, j) => (
-                      <p key={j} className="mb-2.5 text-[15px] leading-relaxed text-(--lp-fg)/80">
-                        {fill(p)}
-                      </p>
+                {sections ? (
+                  <div className="mt-6 max-w-[68ch] space-y-7">
+                    {sections.map((s, i) => (
+                      <section
+                        key={s.title}
+                        id={`s${i + 1}`}
+                        className="scroll-mt-6"
+                      >
+                        <h2 className="mb-2 text-[17px] font-semibold">
+                          {s.title}
+                        </h2>
+                        {s.body.map((p, j) => (
+                          <p
+                            key={j}
+                            className="mb-2.5 text-[15px] leading-relaxed text-(--lp-fg)/80"
+                          >
+                            {fill(p)}
+                          </p>
+                        ))}
+                      </section>
                     ))}
-                  </section>
-                ))}
-              </div>
-            ) : null}
+                  </div>
+                ) : null}
 
-            {page === 'prices' ? (
-              <div className="mt-5 space-y-7">
-                <p className="text-[15px] leading-relaxed text-(--lp-fg)/80">
-                  {fill(pricesText.intro)}
-                </p>
-                <PriceTable
-                  icon={<Lottie animationData={starAnimation} loop className="h-8 w-8 shrink-0" />}
-                  title={PRICES_TEXT[lang].stars}
-                  head={[PRICES_TEXT[lang].pack, PRICES_TEXT[lang].price]}
-                  popular={ui.popular}
-                  rows={stars?.map((p) => ({
-                    label: (
-                      <span className="inline-flex items-center gap-1.5">
-                        {p.stars.toLocaleString('ru-RU')}
-                        <img src="/star.svg" alt="Stars" className="h-[18px] w-[18px] shrink-0" />
-                      </span>
-                    ),
-                    price: money(p.priceUzs),
-                    popular: p.isPopular,
-                  }))}
-                  loading={ui.loading}
-                />
-                <PriceTable
-                  icon={
-                    <img
-                      src="/Telegram Premium.svg"
-                      alt="Telegram Premium"
-                      className="h-8 w-8 shrink-0 object-contain"
+                {page === "prices" ? (
+                  <div className="mt-5 space-y-7">
+                    <p className="text-[15px] leading-relaxed text-(--lp-fg)/80">
+                      {fill(pricesText.intro)}
+                    </p>
+                    <PriceTable
+                      icon={
+                        <Lottie
+                          animationData={starAnimation}
+                          loop
+                          className="h-8 w-8 shrink-0"
+                        />
+                      }
+                      title={PRICES_TEXT[lang].stars}
+                      head={[PRICES_TEXT[lang].pack, PRICES_TEXT[lang].price]}
+                      popular={ui.popular}
+                      rows={stars?.map((p) => ({
+                        label: (
+                          <span className="inline-flex items-center gap-1.5">
+                            {p.stars.toLocaleString("ru-RU")}
+                            <img
+                              src="/star.svg"
+                              alt="Stars"
+                              className="h-[18px] w-[18px] shrink-0"
+                            />
+                          </span>
+                        ),
+                        price: money(p.priceUzs),
+                        popular: p.isPopular,
+                      }))}
+                      loading={ui.loading}
                     />
-                  }
-                  title={PRICES_TEXT[lang].premium}
-                  head={[PRICES_TEXT[lang].pack, PRICES_TEXT[lang].price]}
-                  popular={ui.popular}
-                  rows={premium?.map((p) => ({
-                    label: `${p.premiumMonths} ${PRICES_TEXT[lang].months}`,
-                    price: money(p.priceUzs),
-                    popular: p.isPopular,
-                  }))}
-                  loading={ui.loading}
-                />
-                <p className="flex items-start gap-3 rounded-2xl bg-(--lp-soft) p-4 text-[15px] leading-relaxed text-(--lp-fg)/80">
-                  <Lottie animationData={giftAnimation} loop className="h-9 w-9 shrink-0" />
-                  <span className="pt-1.5">{fill(pricesText.gifts)}</span>
-                </p>
-                <p className="text-[13px] leading-relaxed text-(--lp-muted)">{fill(pricesText.fees)}</p>
-                {BOT_URL ? <PrimaryButton href={BOT_URL} icon={<Send className="h-4 w-4" />}>{ui.buy}</PrimaryButton> : null}
-              </div>
-            ) : null}
+                    <PriceTable
+                      icon={
+                        <img
+                          src="/Telegram Premium.svg"
+                          alt="Telegram Premium"
+                          className="h-8 w-8 shrink-0 object-contain"
+                        />
+                      }
+                      title={PRICES_TEXT[lang].premium}
+                      head={[PRICES_TEXT[lang].pack, PRICES_TEXT[lang].price]}
+                      popular={ui.popular}
+                      rows={premium?.map((p) => ({
+                        label: `${p.premiumMonths} ${PRICES_TEXT[lang].months}`,
+                        price: money(p.priceUzs),
+                        popular: p.isPopular,
+                      }))}
+                      loading={ui.loading}
+                    />
+                    <p className="flex items-start gap-3 rounded-2xl bg-(--lp-soft) p-4 text-[15px] leading-relaxed text-(--lp-fg)/80">
+                      <Lottie
+                        animationData={giftAnimation}
+                        loop
+                        className="h-9 w-9 shrink-0"
+                      />
+                      <span className="pt-1.5">{fill(pricesText.gifts)}</span>
+                    </p>
+                    <p className="text-[13px] leading-relaxed text-(--lp-muted)">
+                      {fill(pricesText.fees)}
+                    </p>
+                    {BOT_URL ? (
+                      <PrimaryButton
+                        href={BOT_URL}
+                        icon={<Send className="h-4 w-4" />}
+                      >
+                        {ui.buy}
+                      </PrimaryButton>
+                    ) : null}
+                  </div>
+                ) : null}
 
-            {page === 'support' ? (
-              <div className="mt-5 space-y-5 text-[15px] leading-relaxed">
-                <p className="text-(--lp-fg)/80">{fill(supportText.intro)}</p>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <ContactCard
-                    icon={<Send className="h-5 w-5" />}
-                    label={SUPPORT_TEXT[lang].telegram}
-                    value={telegram}
-                    href={telegramUrl}
-                  />
-                  <ContactCard
-                    icon={<Mail className="h-5 w-5" />}
-                    label={SUPPORT_TEXT[lang].email}
-                    value={company.email || ui.placeholder.email}
-                    href={company.email ? `mailto:${company.email}` : undefined}
-                  />
-                </div>
-                <p className="text-(--lp-fg)/80">{fill(supportText.hours)}</p>
-                <p className="rounded-2xl bg-(--lp-soft) p-4 text-(--lp-fg)/80">{fill(supportText.tip)}</p>
-                <PrimaryButton href={telegramUrl} icon={<Send className="h-4 w-4" />}>
-                  {ui.write}
-                </PrimaryButton>
+                {page === "support" ? (
+                  <div className="mt-5 space-y-5 text-[15px] leading-relaxed">
+                    <p className="text-(--lp-fg)/80">
+                      {fill(supportText.intro)}
+                    </p>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <ContactCard
+                        icon={<Send className="h-5 w-5" />}
+                        label={SUPPORT_TEXT[lang].telegram}
+                        value={telegram}
+                        href={telegramUrl}
+                      />
+                      <ContactCard
+                        icon={<Mail className="h-5 w-5" />}
+                        label={SUPPORT_TEXT[lang].email}
+                        value={company.email || ui.placeholder.email}
+                        href={
+                          company.email ? `mailto:${company.email}` : undefined
+                        }
+                      />
+                    </div>
+                    <p className="text-(--lp-fg)/80">
+                      {fill(supportText.hours)}
+                    </p>
+                    <p className="rounded-2xl bg-(--lp-soft) p-4 text-(--lp-fg)/80">
+                      {fill(supportText.tip)}
+                    </p>
+                    <PrimaryButton
+                      href={telegramUrl}
+                      icon={<Send className="h-4 w-4" />}
+                    >
+                      {ui.write}
+                    </PrimaryButton>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+            )}
           </main>
         </div>
 
-        <footer className="mt-8 space-y-1 text-[13px] text-(--lp-muted)">
-          <p>
-            {ui.seller}: {company.name || ui.placeholder.name} · {ui.taxId}:{' '}
-            {company.taxId || ui.placeholder.taxId}
-          </p>
-          <p>
-            {ui.address}: {company.address || ui.placeholder.address}
-          </p>
-          <p>
-            {ui.support}: {telegram}
-            {company.email ? ` · ${company.email}` : ''}
-          </p>
-          <p className="pt-2">
-            <a href="/" className="text-(--lp-accent)">
-              ← {ui.home}
-            </a>
-          </p>
-        </footer>
+        {ready ? (
+          <footer className="lp-fade-in mt-8 space-y-1 text-[13px] text-(--lp-muted)">
+            <p>
+              {ui.seller}: {company.name || ui.placeholder.name} · {ui.taxId}:{" "}
+              {company.taxId || ui.placeholder.taxId}
+            </p>
+            <p>
+              {ui.address}: {company.address || ui.placeholder.address}
+            </p>
+            <p>
+              {ui.support}: {telegram}
+              {company.email ? ` · ${company.email}` : ""}
+            </p>
+            <p className="pt-2">
+              <a href="/" className="text-(--lp-accent)">
+                ← {ui.home}
+              </a>
+            </p>
+          </footer>
+        ) : null}
       </div>
 
       {showTop ? (
@@ -397,7 +500,7 @@ export default function LegalPage({ page }: { page: PageKey }) {
           type="button"
           aria-label={ui.toTop}
           title={ui.toTop}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="fixed right-5 bottom-[calc(1.25rem+env(safe-area-inset-bottom,0px))] flex h-11 w-11 items-center justify-center rounded-full bg-(--lp-accent) text-white shadow-lg transition-transform active:scale-95"
         >
           <ArrowUp className="h-5 w-5" />
@@ -407,17 +510,39 @@ export default function LegalPage({ page }: { page: PageKey }) {
   );
 }
 
-function pick(src: RemotePage | null, keys: Array<keyof RemotePage>): Record<string, string> {
+function pick(
+  src: RemotePage | null,
+  keys: Array<keyof RemotePage>,
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const k of keys) {
     const v = src?.[k];
-    if (typeof v === 'string' && v.trim()) out[k] = v;
+    if (typeof v === "string" && v.trim()) out[k] = v;
   }
   return out;
 }
 
+// Placeholder shapes while the real text and seller details load, so the
+// visitor never sees bundled text or [placeholders] swap into the real ones.
+const PageSkeleton = () => (
+  <div className="animate-pulse space-y-4" aria-hidden>
+    <div className="h-8 w-2/3 rounded-xl bg-(--lp-soft)" />
+    <div className="h-3 w-32 rounded-full bg-(--lp-soft)" />
+    {[0, 1, 2].map((i) => (
+      <div key={i} className="space-y-2.5 pt-4">
+        <div className="h-5 w-1/3 rounded-lg bg-(--lp-soft)" />
+        <div className="h-3.5 w-full rounded-full bg-(--lp-soft)" />
+        <div className="h-3.5 w-11/12 rounded-full bg-(--lp-soft)" />
+        <div className="h-3.5 w-4/5 rounded-full bg-(--lp-soft)" />
+      </div>
+    ))}
+  </div>
+);
+
 const Segmented = ({ children }: { children: ReactNode }) => (
-  <div className="flex gap-0.5 rounded-full bg-(--lp-card) p-1 shadow-sm">{children}</div>
+  <div className="flex gap-0.5 rounded-full bg-(--lp-card) p-1 shadow-sm">
+    {children}
+  </div>
 );
 
 const SegButton = ({
@@ -439,7 +564,9 @@ const SegButton = ({
     aria-pressed={active}
     onClick={onClick}
     className={`flex h-8 min-w-8 items-center justify-center rounded-full px-2.5 transition-colors ${
-      active ? 'bg-(--lp-accent) text-white' : 'text-(--lp-muted) hover:text-(--lp-fg)'
+      active
+        ? "bg-(--lp-accent) text-white"
+        : "text-(--lp-muted) hover:text-(--lp-fg)"
     }`}
   >
     {children}
@@ -486,9 +613,13 @@ const ContactCard = ({
       </span>
     </>
   );
-  const cls = 'flex items-center gap-3 rounded-2xl border border-(--lp-line) bg-(--lp-soft) p-4';
+  const cls =
+    "flex items-center gap-3 rounded-2xl border border-(--lp-line) bg-(--lp-soft) p-4";
   return href ? (
-    <a href={href} className={`${cls} transition-colors hover:border-(--lp-accent)`}>
+    <a
+      href={href}
+      className={`${cls} transition-colors hover:border-(--lp-accent)`}
+    >
       {body}
     </a>
   ) : (
@@ -542,7 +673,7 @@ function PriceTable({
               rows.map((r, i) => (
                 <tr
                   key={i}
-                  className={`border-t border-(--lp-line) ${r.popular ? 'bg-(--lp-accent)/8' : ''}`}
+                  className={`border-t border-(--lp-line) ${r.popular ? "bg-(--lp-accent)/8" : ""}`}
                 >
                   <td className="px-4 py-2.5">
                     <span className="inline-flex flex-wrap items-center gap-2">
@@ -554,7 +685,9 @@ function PriceTable({
                       ) : null}
                     </span>
                   </td>
-                  <td className="px-4 py-2.5 text-right font-semibold tabular-nums">{r.price}</td>
+                  <td className="px-4 py-2.5 text-right font-semibold tabular-nums">
+                    {r.price}
+                  </td>
                 </tr>
               ))
             )}
