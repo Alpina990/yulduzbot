@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import Lottie from 'lottie-react';
+import giftAnimation from '../gift.json';
+import starAnimation from '../star.json';
 import {
   EDITION,
   PRICES_TEXT,
@@ -78,8 +81,15 @@ export default function LegalPage({ page }: { page: PageKey }) {
     }
   }, [page]);
 
+  // On phones the menu is one scrollable row: bring the open page into view.
   useEffect(() => {
-    document.title = `${ui.nav[page]} — ${BRAND_NAME}`;
+    document
+      .querySelector('nav [aria-current="page"]')
+      ?.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }, [page]);
+
+  useEffect(() => {
+    document.title = `${ui.nav[page]} | ${BRAND_NAME}`;
     document.documentElement.lang = lang;
   }, [page, lang, ui]);
 
@@ -104,10 +114,10 @@ export default function LegalPage({ page }: { page: PageKey }) {
 
   return (
     <div className="min-h-[100dvh] w-full bg-gradient-to-b from-[#EAF4FB] via-[#F4F9FC] to-[#FFFFFF] font-sans text-[#0F1B2A]">
-      <div className="mx-auto w-full max-w-[760px] px-5 py-8 sm:py-12">
+      <div className="mx-auto w-full max-w-[1040px] px-5 py-8 sm:py-12">
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <a href="/" className="inline-flex items-center gap-2.5">
-            <img src={LOGO_PATH} alt={BRAND_NAME} className="h-8 w-8 object-contain" />
+            <img src={LOGO_PATH} alt={BRAND_NAME} className="h-8 w-8 shrink-0 object-contain" />
             <span className="text-[16px] font-semibold tracking-tight">{BRAND_NAME}</span>
           </a>
           <div className="flex gap-1 rounded-full bg-white/70 p-1 shadow-sm">
@@ -126,20 +136,26 @@ export default function LegalPage({ page }: { page: PageKey }) {
           </div>
         </header>
 
-        <nav className="mb-8 flex flex-wrap gap-2">
-          {LEGAL_PAGES.map((p) => (
-            <a
-              key={p}
-              href={`/${p}?lang=${lang}`}
-              className={`rounded-full px-3.5 py-1.5 text-[13px] font-medium ${
-                p === page
-                  ? 'bg-[#0F1B2A] text-white'
-                  : 'bg-white/80 text-[#0F1B2A]/70 shadow-sm hover:text-[#0F1B2A]'
-              }`}
-            >
-              {ui.nav[p]}
-            </a>
-          ))}
+        <div className="md:grid md:grid-cols-[230px_minmax(0,1fr)] md:items-start md:gap-8">
+        {/* Mobile: one scrollable row on top. Desktop: a sticky column on the left. */}
+        <nav className="-mx-5 mb-6 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] md:sticky md:top-6 md:mx-0 md:mb-0 md:flex-col md:gap-1 md:overflow-visible md:rounded-3xl md:bg-white/70 md:p-2 md:shadow-sm">
+          {LEGAL_PAGES.map((p) => {
+            const active = p === page;
+            return (
+              <a
+                key={p}
+                href={`/${p}?lang=${lang}`}
+                aria-current={active ? 'page' : undefined}
+                className={`shrink-0 rounded-full px-4 py-2 text-[14px] font-medium whitespace-nowrap transition-colors md:rounded-2xl md:py-2.5 ${
+                  active
+                    ? 'bg-[#2AABEE] text-white shadow-[0_8px_20px_-8px_rgba(42,171,238,0.7)]'
+                    : 'bg-white/80 text-[#0F1B2A]/70 shadow-sm hover:bg-[#2AABEE]/10 hover:text-[#0F1B2A] md:bg-transparent md:shadow-none'
+                }`}
+              >
+                {ui.nav[p]}
+              </a>
+            );
+          })}
         </nav>
 
         <main className="rounded-3xl bg-white/80 p-6 shadow-[0_20px_60px_-25px_rgba(42,171,238,0.35)] sm:p-9">
@@ -171,12 +187,22 @@ export default function LegalPage({ page }: { page: PageKey }) {
                 {fill(PRICES_TEXT[lang].intro)}
               </p>
               <PriceTable
+                icon={<Lottie animationData={starAnimation} loop className="h-8 w-8 shrink-0" />}
                 title={PRICES_TEXT[lang].stars}
                 head={[PRICES_TEXT[lang].pack, PRICES_TEXT[lang].price]}
-                rows={stars?.map((p) => [`${p.stars.toLocaleString('ru-RU')} ⭐`, money(p.priceUzs)])}
+                rows={stars?.map((p) => [
+                  <span key="s" className="inline-flex items-center gap-1.5">
+                    {p.stars.toLocaleString('ru-RU')}
+                    <img src="/star.svg" alt="Stars" className="h-[18px] w-[18px] shrink-0" />
+                  </span>,
+                  money(p.priceUzs),
+                ])}
                 loading={ui.loading}
               />
               <PriceTable
+                icon={
+                  <img src="/Telegram Premium.svg" alt="Telegram Premium" className="h-8 w-8 object-contain" />
+                }
                 title={PRICES_TEXT[lang].premium}
                 head={[PRICES_TEXT[lang].pack, PRICES_TEXT[lang].price]}
                 rows={premium?.map((p) => [
@@ -185,7 +211,10 @@ export default function LegalPage({ page }: { page: PageKey }) {
                 ])}
                 loading={ui.loading}
               />
-              <p className="text-[15px] leading-relaxed text-[#0F1B2A]/80">{PRICES_TEXT[lang].gifts}</p>
+              <p className="flex items-start gap-3 text-[15px] leading-relaxed text-[#0F1B2A]/80">
+                <Lottie animationData={giftAnimation} loop className="h-9 w-9 shrink-0" />
+                <span className="pt-1.5">{PRICES_TEXT[lang].gifts}</span>
+              </p>
               <p className="text-[13px] leading-relaxed text-[#0F1B2A]/55">{PRICES_TEXT[lang].fees}</p>
             </div>
           ) : null}
@@ -219,6 +248,7 @@ export default function LegalPage({ page }: { page: PageKey }) {
             </div>
           ) : null}
         </main>
+        </div>
 
         <footer className="mt-8 space-y-1 text-[13px] text-[#0F1B2A]/55">
           <p>
@@ -244,19 +274,24 @@ export default function LegalPage({ page }: { page: PageKey }) {
 }
 
 function PriceTable({
+  icon,
   title,
   head,
   rows,
   loading,
 }: {
+  icon: ReactNode;
   title: string;
   head: [string, string];
-  rows: string[][] | undefined;
+  rows: Array<[ReactNode, string]> | undefined;
   loading: string;
 }) {
   return (
     <section>
-      <h2 className="mb-3 text-[17px] font-semibold">{title}</h2>
+      <h2 className="mb-3 flex items-center gap-2 text-[17px] font-semibold">
+        {icon}
+        {title}
+      </h2>
       <div className="overflow-hidden rounded-2xl border border-[#2AABEE]/15">
         <table className="w-full text-[15px]">
           <thead className="bg-[#F4F9FC] text-left text-[13px] text-[#0F1B2A]/55">
@@ -273,8 +308,8 @@ function PriceTable({
                 </td>
               </tr>
             ) : (
-              rows.map(([a, b]) => (
-                <tr key={a} className="border-t border-[#2AABEE]/10">
+              rows.map(([a, b], i) => (
+                <tr key={i} className="border-t border-[#2AABEE]/10">
                   <td className="px-4 py-2.5">{a}</td>
                   <td className="px-4 py-2.5 text-right font-semibold tabular-nums">{b}</td>
                 </tr>

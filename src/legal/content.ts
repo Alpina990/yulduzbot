@@ -107,7 +107,7 @@ export const PRIVACY: Record<Lang, Section[]> = {
       title: '1. Общие положения',
       body: [
         'Настоящая политика описывает, какие данные обрабатывает сервис {brand} (Telegram-бот, мини-приложение и сайт), управляемый {company} (ИНН {taxId}, адрес: {address}), зачем и как долго.',
-        'Пользуясь сервисом, вы соглашаетесь с этой политикой. Если вы не согласны — не пользуйтесь сервисом.',
+        'Пользуясь сервисом, вы соглашаетесь с этой политикой. Если вы не согласны, не пользуйтесь сервисом.',
       ],
     },
     {
@@ -131,9 +131,9 @@ export const PRIVACY: Record<Lang, Section[]> = {
     {
       title: '4. Кому мы передаём данные',
       body: [
-        'Telegram и Fragment — для доставки купленного товара на ваш аккаунт.',
-        'Платёжным провайдерам и банкам — в объёме, необходимом для проведения и проверки платежа.',
-        'Государственным органам — только по законному требованию.',
+        'Telegram и Fragment: для доставки купленного товара на ваш аккаунт.',
+        'Платёжным провайдерам и банкам: в объёме, необходимом для проведения и проверки платежа.',
+        'Государственным органам: только по законному требованию.',
         'Мы не продаём персональные данные третьим лицам.',
       ],
     },
@@ -147,7 +147,7 @@ export const PRIVACY: Record<Lang, Section[]> = {
     {
       title: '6. Ваши права',
       body: [
-        'Вы можете запросить сведения о ваших данных, их исправление или удаление, а также отозвать согласие на рекламные сообщения — напишите в поддержку {telegram} или на {email}.',
+        'Вы можете запросить сведения о ваших данных, их исправление или удаление, а также отозвать согласие на рекламные сообщения. Для этого напишите в поддержку {telegram} или на {email}.',
         'Удаление данных о совершённых платежах может быть ограничено требованиями закона.',
       ],
     },
@@ -187,9 +187,9 @@ export const PRIVACY: Record<Lang, Section[]> = {
     {
       title: "4. Ma'lumotlarni kimga uzatamiz",
       body: [
-        "Telegram va Fragment — sotib olingan mahsulotni akkauntingizga yetkazish uchun.",
-        "To'lov provayderlari va banklarga — to'lovni o'tkazish va tekshirish uchun zarur hajmda.",
-        "Davlat organlariga — faqat qonuniy talab bo'yicha.",
+        "Telegram va Fragment: sotib olingan mahsulotni akkauntingizga yetkazish uchun.",
+        "To'lov provayderlari va banklarga: to'lovni o'tkazish va tekshirish uchun zarur hajmda.",
+        "Davlat organlariga: faqat qonuniy talab bo'yicha.",
         "Biz shaxsiy ma'lumotlarni uchinchi shaxslarga sotmaymiz.",
       ],
     },
@@ -203,7 +203,7 @@ export const PRIVACY: Record<Lang, Section[]> = {
     {
       title: '6. Sizning huquqlaringiz',
       body: [
-        "Ma'lumotlaringiz haqida ma'lumot, ularni tuzatish yoki o'chirishni so'rashingiz, reklama xabarlariga rozilikni qaytarib olishingiz mumkin — {telegram} yoki {email} manziliga yozing.",
+        "Ma'lumotlaringiz haqida ma'lumot, ularni tuzatish yoki o'chirishni so'rashingiz, reklama xabarlariga rozilikni qaytarib olishingiz mumkin. Buning uchun {telegram} yoki {email} manziliga yozing.",
         "Amalga oshirilgan to'lovlar ma'lumotlarini o'chirish qonun talablari bilan cheklanishi mumkin.",
       ],
     },
@@ -241,9 +241,9 @@ export const PRIVACY: Record<Lang, Section[]> = {
     {
       title: '4. Who we share data with',
       body: [
-        'Telegram and Fragment — to deliver the purchased item to your account.',
-        'Payment providers and banks — as far as needed to process and verify the payment.',
-        'Authorities — only on a lawful request.',
+        'Telegram and Fragment: to deliver the purchased item to your account.',
+        'Payment providers and banks: as far as needed to process and verify the payment.',
+        'Authorities: only on a lawful request.',
         'We do not sell personal data to third parties.',
       ],
     },
@@ -257,7 +257,7 @@ export const PRIVACY: Record<Lang, Section[]> = {
     {
       title: '6. Your rights',
       body: [
-        'You can request access to, correction or deletion of your data, and withdraw consent to promotional messages — write to {telegram} or {email}.',
+        'You can request access to, correction or deletion of your data, and withdraw consent to promotional messages. To do so, write to {telegram} or {email}.',
         'Deleting records of completed payments may be limited by law.',
       ],
     },
@@ -273,15 +273,15 @@ export const TERMS: Record<Lang, Section[]> = {
     {
       title: '1. Стороны и предмет',
       body: [
-        'Соглашение заключается между {company} (ИНН {taxId}, адрес: {address}) — «Продавец» — и пользователем сервиса {brand} — «Покупатель».',
-        'Продавец оказывает услуги по приобретению и передаче на Telegram-аккаунт цифровых товаров: Telegram Stars, подписки Telegram Premium и подарков Telegram (далее — «Товар»).',
+        'Соглашение заключается между {company} (ИНН {taxId}, адрес: {address}), далее «Продавец», и пользователем сервиса {brand}, далее «Покупатель».',
+        'Продавец оказывает услуги по приобретению и передаче на Telegram-аккаунт цифровых товаров: Telegram Stars, подписки Telegram Premium и подарков Telegram (далее, «Товар»).',
         'Оформляя заказ, Покупатель подтверждает, что ознакомился с соглашением, политикой конфиденциальности и ценами и принимает их.',
       ],
     },
     {
       title: '2. Оформление заказа',
       body: [
-        'Заказ оформляется в Telegram-боте или мини-приложении {brand}. Покупатель выбирает Товар и указывает username получателя — свой или другого пользователя Telegram.',
+        'Заказ оформляется в Telegram-боте или мини-приложении {brand}. Покупатель выбирает Товар и указывает username получателя, свой или другого пользователя Telegram.',
         'Покупатель отвечает за правильность username получателя. Товар, доставленный на указанный username, считается переданным надлежащим образом.',
       ],
     },
@@ -319,7 +319,7 @@ export const TERMS: Record<Lang, Section[]> = {
       title: '7. Ответственность и споры',
       body: [
         'Ответственность Продавца ограничена суммой оплаченного заказа.',
-        'Споры решаются путём переговоров через поддержку {telegram} / {email}; срок ответа на претензию — до 10 рабочих дней. При недостижении согласия спор рассматривается в порядке, предусмотренном законодательством по месту регистрации Продавца.',
+        'Споры решаются путём переговоров через поддержку {telegram} / {email}; срок ответа на претензию: до 10 рабочих дней. При недостижении согласия спор рассматривается в порядке, предусмотренном законодательством по месту регистрации Продавца.',
       ],
     },
     {
@@ -331,15 +331,15 @@ export const TERMS: Record<Lang, Section[]> = {
     {
       title: '1. Tomonlar va predmet',
       body: [
-        "Kelishuv {company} (STIR {taxId}, manzil: {address}) — «Sotuvchi» — va {brand} xizmati foydalanuvchisi — «Xaridor» o'rtasida tuziladi.",
-        "Sotuvchi Telegram akkauntiga raqamli mahsulotlarni sotib olish va yetkazish xizmatini ko'rsatadi: Telegram Stars, Telegram Premium obunasi va Telegram sovg'alari (keyingi o'rinlarda — «Mahsulot»).",
+        "Kelishuv {company} (STIR {taxId}, manzil: {address}), keyingi o'rinlarda «Sotuvchi», va {brand} xizmati foydalanuvchisi, keyingi o'rinlarda «Xaridor», o'rtasida tuziladi.",
+        "Sotuvchi Telegram akkauntiga raqamli mahsulotlarni sotib olish va yetkazish xizmatini ko'rsatadi: Telegram Stars, Telegram Premium obunasi va Telegram sovg'alari (keyingi o'rinlarda, «Mahsulot»).",
         "Buyurtma berib, Xaridor kelishuv, maxfiylik siyosati va narxlar bilan tanishganini va ularni qabul qilishini tasdiqlaydi.",
       ],
     },
     {
       title: '2. Buyurtma berish',
       body: [
-        "Buyurtma {brand} Telegram boti yoki mini-ilovasida beriladi. Xaridor Mahsulotni tanlaydi va qabul qiluvchining username'ini — o'zinikini yoki boshqa Telegram foydalanuvchisinikini ko'rsatadi.",
+        "Buyurtma {brand} Telegram boti yoki mini-ilovasida beriladi. Xaridor Mahsulotni tanlaydi va qabul qiluvchining username'ini, o'zinikini yoki boshqa Telegram foydalanuvchisinikini ko'rsatadi.",
         "Qabul qiluvchi username'ining to'g'riligi uchun Xaridor javobgar. Ko'rsatilgan username'ga yetkazilgan Mahsulot lozim darajada topshirilgan hisoblanadi.",
       ],
     },
@@ -377,7 +377,7 @@ export const TERMS: Record<Lang, Section[]> = {
       title: '7. Javobgarlik va nizolar',
       body: [
         "Sotuvchining javobgarligi to'langan buyurtma summasi bilan cheklanadi.",
-        "Nizolar {telegram} / {email} qo'llab-quvvatlash orqali muzokaralar yo'li bilan hal qilinadi; da'voga javob muddati — 10 ish kunigacha. Kelishuvga erishilmasa, nizo Sotuvchi ro'yxatdan o'tgan joy qonunchiligida nazarda tutilgan tartibda ko'rib chiqiladi.",
+        "Nizolar {telegram} / {email} qo'llab-quvvatlash orqali muzokaralar yo'li bilan hal qilinadi; da'voga javob muddati: 10 ish kunigacha. Kelishuvga erishilmasa, nizo Sotuvchi ro'yxatdan o'tgan joy qonunchiligida nazarda tutilgan tartibda ko'rib chiqiladi.",
       ],
     },
     {
@@ -389,7 +389,7 @@ export const TERMS: Record<Lang, Section[]> = {
     {
       title: '1. Parties and subject',
       body: [
-        'This agreement is made between {company} (tax ID {taxId}, address: {address}) — the "Seller" — and the user of the {brand} service — the "Buyer".',
+        'This agreement is made between {company} (tax ID {taxId}, address: {address}), the "Seller", and the user of the {brand} service, the "Buyer".',
         'The Seller buys and delivers to a Telegram account digital goods: Telegram Stars, Telegram Premium subscriptions and Telegram gifts (the "Goods").',
         'By placing an order the Buyer confirms having read and accepted this agreement, the privacy policy and the prices.',
       ],
@@ -397,7 +397,7 @@ export const TERMS: Record<Lang, Section[]> = {
     {
       title: '2. Placing an order',
       body: [
-        'Orders are placed in the {brand} Telegram bot or mini app. The Buyer picks the Goods and the recipient username — their own or another Telegram user.',
+        'Orders are placed in the {brand} Telegram bot or mini app. The Buyer picks the Goods and the recipient username, their own or another Telegram user.',
         'The Buyer is responsible for the recipient username. Goods delivered to the username given are deemed duly delivered.',
       ],
     },
@@ -420,7 +420,7 @@ export const TERMS: Record<Lang, Section[]> = {
       title: '5. Refunds',
       body: [
         'The Goods are digital and are not refundable once delivered to the recipient account.',
-        "If the Goods were not delivered through the Seller's fault, the Buyer is entitled to a full refund to the original payment method — write to support with the order number.",
+        "If the Goods were not delivered through the Seller's fault, the Buyer is entitled to a full refund to the original payment method. To request it, write to support with the order number.",
         "Refunds are made within 10 business days of the decision; the actual credit depends on the Buyer's bank.",
       ],
     },
@@ -452,7 +452,7 @@ export const PRICES_TEXT: Record<Lang, { intro: string; stars: string; premium: 
     premium: 'Telegram Premium',
     months: 'мес.',
     gifts: 'Подарки Telegram: цена указана на карточке подарка в боте и мини-приложении до оплаты.',
-    fees: 'Цены указаны в узбекских сумах (UZS), включают все комиссии сервиса. Оплата в рублях — по сумме, показанной на экране оплаты.',
+    fees: 'Цены указаны в узбекских сумах (UZS), включают все комиссии сервиса. Оплата в рублях производится по сумме, показанной на экране оплаты.',
     pack: 'Пакет',
     price: 'Цена',
   },
@@ -483,21 +483,21 @@ export const SUPPORT_TEXT: Record<Lang, { intro: string; telegram: string; email
     intro: 'Мы отвечаем на вопросы по заказам, оплате и возвратам.',
     telegram: 'Telegram',
     email: 'Email',
-    hours: 'Ежедневно, ответ обычно в течение 1 часа (09:00–23:00 по Ташкенту), письма — в течение 1 рабочего дня.',
+    hours: 'Ежедневно, ответ обычно в течение 1 часа (09:00-23:00 по Ташкенту), письма в течение 1 рабочего дня.',
     tip: 'Чтобы мы помогли быстрее, укажите номер заказа и username получателя.',
   },
   uz: {
     intro: "Buyurtmalar, to'lov va qaytarish bo'yicha savollarga javob beramiz.",
     telegram: 'Telegram',
     email: 'Email',
-    hours: "Har kuni, javob odatda 1 soat ichida (Toshkent vaqti bilan 09:00–23:00), xatlar — 1 ish kuni ichida.",
+    hours: "Har kuni, javob odatda 1 soat ichida (Toshkent vaqti bilan 09:00-23:00), xatlar 1 ish kuni ichida.",
     tip: "Tezroq yordam berishimiz uchun buyurtma raqami va qabul qiluvchi username'ini yozing.",
   },
   en: {
     intro: 'We answer questions about orders, payments and refunds.',
     telegram: 'Telegram',
     email: 'Email',
-    hours: 'Daily, usually within 1 hour (09:00–23:00 Tashkent time); emails within 1 business day.',
+    hours: 'Daily, usually within 1 hour (09:00-23:00 Tashkent time); emails within 1 business day.',
     tip: 'To help faster, include the order number and the recipient username.',
   },
 };
