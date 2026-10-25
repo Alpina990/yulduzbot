@@ -28,6 +28,12 @@ export const UI: Record<
     email: string;
     support: string;
     loading: string;
+    contents: string;
+    toTop: string;
+    buy: string;
+    write: string;
+    popular: string;
+    theme: { light: string; dark: string; system: string };
     placeholder: { name: string; taxId: string; address: string; email: string };
   }
 > = {
@@ -46,6 +52,12 @@ export const UI: Record<
     email: 'Email',
     support: 'Поддержка',
     loading: 'Загрузка…',
+    contents: 'Содержание',
+    toTop: 'Наверх',
+    buy: 'Купить в Telegram',
+    write: 'Написать в поддержку',
+    popular: 'Популярно',
+    theme: { light: 'Светлая', dark: 'Тёмная', system: 'Как в системе' },
     placeholder: {
       name: '[НАЗВАНИЕ ЮРЛИЦА]',
       taxId: '[ИНН]',
@@ -68,6 +80,12 @@ export const UI: Record<
     email: 'Email',
     support: "Qo'llab-quvvatlash",
     loading: 'Yuklanmoqda…',
+    contents: 'Mundarija',
+    toTop: 'Yuqoriga',
+    buy: 'Telegramda sotib olish',
+    write: "Qo'llab-quvvatlashga yozish",
+    popular: 'Ommabop',
+    theme: { light: "Yorug'", dark: "Qorong'i", system: 'Tizimdagidek' },
     placeholder: {
       name: '[YURIDIK SHAXS NOMI]',
       taxId: '[STIR]',
@@ -90,6 +108,12 @@ export const UI: Record<
     email: 'Email',
     support: 'Support',
     loading: 'Loading…',
+    contents: 'Contents',
+    toTop: 'Back to top',
+    buy: 'Buy in Telegram',
+    write: 'Message support',
+    popular: 'Popular',
+    theme: { light: 'Light', dark: 'Dark', system: 'System' },
     placeholder: {
       name: '[COMPANY NAME]',
       taxId: '[TAX ID]',

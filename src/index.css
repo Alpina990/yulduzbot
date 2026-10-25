@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+/* Legal pages (src/legal): light / dark palette as tokens; the wrapper gets
+   .lp-dark when the visitor picks dark (or the system prefers it). */
+.lp {
+  --lp-bg-from: #eaf4fb;
+  --lp-bg-to: #ffffff;
+  --lp-card: rgba(255, 255, 255, 0.85);
+  --lp-soft: #f4f9fc;
+  --lp-fg: #0f1b2a;
+  --lp-muted: rgba(15, 27, 42, 0.6);
+  --lp-line: rgba(42, 171, 238, 0.15);
+  --lp-accent: #2aabee;
+  color-scheme: light;
+}
+.lp.lp-dark {
+  --lp-bg-from: #0b1420;
+  --lp-bg-to: #0f1b2a;
+  --lp-card: rgba(22, 33, 48, 0.9);
+  --lp-soft: #182638;
+  --lp-fg: #e8eef5;
+  --lp-muted: rgba(232, 238, 245, 0.6);
+  --lp-line: rgba(42, 171, 238, 0.22);
+  --lp-accent: #3cb4f0;
+  color-scheme: dark;
+}
+
 @font-face {
   font-family: 'SF Pro Display';
   src: url('/fonts/SF-Pro-Display-Regular.otf') format('opentype');
