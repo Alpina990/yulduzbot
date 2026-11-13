@@ -1,7 +1,5 @@
 import { ArrowRight, CreditCard } from 'lucide-react';
-import Lottie from 'lottie-react';
-import giftAnimation from './gift.json';
-import starAnimation from './star.json';
+import LazyLottie from './LazyLottie';
 
 const BOT_URL = (
   import.meta.env.VITE_BOT_URL || 'https://telegram.dog/YulduzPayBot?start=auto'
@@ -28,7 +26,7 @@ export default function App() {
             className="relative inline-flex items-center group"
           >
             <div className="absolute right-full mr-2.5 w-8 h-8 flex items-center justify-center">
-              <img src={LOGO_PATH} alt={BRAND_NAME} className="w-full h-full object-contain" />
+              <img src={LOGO_PATH} alt="" className="w-full h-full object-contain" />
             </div>
             <span className="text-[16px] font-semibold tracking-tight text-[#0F1B2A]">{BRAND_NAME}</span>
           </a>
@@ -79,10 +77,8 @@ export default function App() {
             className="entrance-scale-in col-span-1 row-span-1 relative rounded-[1.2rem] overflow-hidden border border-[#E8B400]/30 bg-gradient-to-br from-[#FFF8DD] via-[#FFFCEF] to-[#FFFFFF] p-3 flex flex-col items-center justify-center gap-2.5 group transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_6px_20px_-12px_rgba(232,180,0,0.4)]"
             style={{ animationDelay: '260ms' }}
           >
-            <Lottie
-              animationData={starAnimation}
-              loop
-              autoplay
+            <LazyLottie
+              name="star"
               className="w-[56px] h-[56px] drop-shadow-sm transition-transform duration-300 group-hover:scale-110"
             />
             <span className="text-[13px] font-bold tracking-[0.12em] text-[#B8860B] uppercase">Stars</span>
@@ -94,12 +90,7 @@ export default function App() {
             className="entrance-scale-in col-span-1 row-span-1 relative rounded-[1.2rem] overflow-hidden border border-[#FF8FB1]/30 bg-gradient-to-br from-[#FFE8F0] via-[#FFF4F8] to-[#FFFFFF] p-3 flex flex-col items-center justify-center gap-2.5 group transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_6px_20px_-12px_rgba(255,143,177,0.4)]"
             style={{ animationDelay: '340ms' }}
           >
-            <Lottie
-              animationData={giftAnimation}
-              loop
-              autoplay
-              className="w-12 h-12"
-            />
+            <LazyLottie name="gift" className="w-12 h-12" />
             <span className="text-[13px] font-bold tracking-[0.12em] text-[#E64380] uppercase">Gifts</span>
           </a>
         </section>

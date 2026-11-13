@@ -3,6 +3,7 @@ import Lottie from "lottie-react";
 import { ArrowUp, Mail, Monitor, Moon, Send, Sun } from "lucide-react";
 import giftAnimation from "../gift.json";
 import starAnimation from "../star.json";
+import { LEGAL_PAGES } from "./pages";
 import {
   EDITION,
   PRICES_TEXT,
@@ -29,16 +30,10 @@ const BOT_URL = (import.meta.env.VITE_BOT_URL || "").replace(
 );
 const LOGO_PATH = `/${BRAND_NAME.toLowerCase()}_icon.png`;
 
-export const LEGAL_PAGES: PageKey[] = ["privacy", "terms", "prices", "support"];
 const LANGS: Lang[] = ["ru", "uz", "en"];
 
 type Theme = "light" | "dark" | "system";
 const THEME_KEY = "sp-legal-theme";
-
-export const legalPageFromPath = (path: string): PageKey | null => {
-  const key = path.replace(/^\/+|\/+$/g, "") as PageKey;
-  return LEGAL_PAGES.includes(key) ? key : null;
-};
 
 const pickLang = (): Lang => {
   const q = new URLSearchParams(window.location.search).get("lang");

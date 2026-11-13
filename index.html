@@ -1,9 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="uz">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>%VITE_BRAND_NAME% — Telegram Premium, Stars & Gifts</title>
+    <meta name="description" content="%VITE_BRAND_NAME%: Telegram Premium, Yulduzlar (Stars) va sovg'alarni o'zbek so'mida xarid qiling. To'lov Click, Payme, Uzum, Uzcard va Humo orqali." />
+    <meta name="theme-color" content="#EAF4FB" />
+    <link rel="preload" href="/fonts/SF-Pro-Display-Bold-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/SF-Pro-Display-Semibold-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Meta Pixel Code -->
     <script>
@@ -13,7 +17,9 @@
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
     n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    // The pixel script loads after the page; fbq calls queue until then.
+    var go=function(){s.parentNode.insertBefore(t,s)};
+    if(b.readyState==='complete')go();else f.addEventListener('load',go,{once:true})}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     const pixelIds = %META_PIXEL_IDS%;
     pixelIds.forEach(function(id) { fbq('init', id); });
