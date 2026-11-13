@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import Lottie from "lottie-react";
+import LottiePlayer from "../LottiePlayer";
 import { ArrowUp, Mail, Monitor, Moon, Send, Sun } from "lucide-react";
 import giftAnimation from "../gift.json";
 import starAnimation from "../star.json";
@@ -363,9 +363,8 @@ export default function LegalPage({ page }: { page: PageKey }) {
                     </p>
                     <PriceTable
                       icon={
-                        <Lottie
+                        <LottiePlayer
                           animationData={starAnimation}
-                          loop
                           className="h-8 w-8 shrink-0"
                         />
                       }
@@ -407,9 +406,8 @@ export default function LegalPage({ page }: { page: PageKey }) {
                       loading={ui.loading}
                     />
                     <p className="flex items-start gap-3 rounded-2xl bg-(--lp-soft) p-4 text-[15px] leading-relaxed text-(--lp-fg)/80">
-                      <Lottie
+                      <LottiePlayer
                         animationData={giftAnimation}
-                        loop
                         className="h-9 w-9 shrink-0"
                       />
                       <span className="pt-1.5">{fill(pricesText.gifts)}</span>
