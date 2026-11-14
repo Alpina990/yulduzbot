@@ -11,7 +11,12 @@ const GIFTS_URL = IS_STARPAY ? '/gift/' : BOT_URL;
 // StarPay's legal pages live here (src/legal); YulduzPay's are its own, in the mini app.
 const FOOTER_LINKS = IS_STARPAY
   ? [['Narxlar', '/prices'], ['Kelishuv', '/terms'], ['Maxfiylik', '/privacy'], ['Yordam', '/support']]
-  : [['Kelishuv', 'https://app.yulduzpay.uz/terms?lang=uz'], ['Maxfiylik', 'https://app.yulduzpay.uz/privacy?lang=uz']];
+  : [
+      ['Narxlar', 'https://app.yulduzpay.uz/prices?lang=uz'],
+      ['Kelishuv', 'https://app.yulduzpay.uz/terms?lang=uz'],
+      ['Maxfiylik', 'https://app.yulduzpay.uz/privacy?lang=uz'],
+      ['Yordam', 'https://app.yulduzpay.uz/support?lang=uz'],
+    ];
 
 export default function App() {
   return (
