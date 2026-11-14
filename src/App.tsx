@@ -129,8 +129,12 @@ export default function App() {
 
         {/* ───────── 5. CTA (single, no neon) ───────── */}
         <section className="w-full mt-6 entrance-fade-up" style={{ animationDelay: '500ms' }}>
+          {/* Lead is the event the ads optimise for; a new tab keeps this page alive long enough to send it. */}
           <a
             href={BOT_URL}
+            target="_blank"
+            rel="noopener"
+            onClick={() => (window as { fbq?: (...args: unknown[]) => void }).fbq?.('track', 'Lead', { content_name: 'Telegram orqali boshlash' })}
             className="group relative w-full flex items-center justify-center gap-2 bg-[#2AABEE] hover:bg-[#1E96DA] text-white font-semibold py-[1.05rem] px-5 rounded-[1.1rem] shadow-[0_10px_30px_-8px_rgba(42,171,238,0.6)] transition-all duration-200 active:scale-[0.98]"
           >
             {/* Shimmer effect wrapper (clipped) */}
