@@ -8,6 +8,8 @@ const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'YulduzPay';
 const LOGO_PATH = `/${BRAND_NAME.toLowerCase()}_icon.png`;
 const IS_STARPAY = BRAND_NAME.replace(/[\s_-]/g, '').toLowerCase() === 'starpay';
 const GIFTS_URL = IS_STARPAY ? '/gift/' : BOT_URL;
+// Legal pages (src/legal), filled from each brand's own Admin (Documents).
+const FOOTER_LINKS = [['Narxlar', '/prices'], ['Kelishuv', '/terms'], ['Maxfiylik', '/privacy'], ['Yordam', '/support']];
 
 export default function App() {
   return (
@@ -159,14 +161,11 @@ export default function App() {
           </a>
         </section>
 
-        {IS_STARPAY ? (
-          <footer className="w-full mt-5 flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-[#0F1B2A]/45">
-            <a href="/prices" className="hover:text-[#0F1B2A]/70">Narxlar</a>
-            <a href="/terms" className="hover:text-[#0F1B2A]/70">Kelishuv</a>
-            <a href="/privacy" className="hover:text-[#0F1B2A]/70">Maxfiylik</a>
-            <a href="/support" className="hover:text-[#0F1B2A]/70">Yordam</a>
-          </footer>
-        ) : null}
+        <footer className="w-full mt-5 flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-[#0F1B2A]/45">
+          {FOOTER_LINKS.map(([label, href]) => (
+            <a key={href} href={href} className="hover:text-[#0F1B2A]/70">{label}</a>
+          ))}
+        </footer>
 
       </div>
     </div>

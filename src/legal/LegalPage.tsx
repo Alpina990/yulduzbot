@@ -22,7 +22,7 @@ const IS_STARPAY =
   BRAND_NAME.replace(/[\s_-]/g, "").toLowerCase() === "starpay";
 const API_URL = (
   import.meta.env.VITE_API_URL ||
-  (IS_STARPAY ? "https://api-app.starpay.uz" : "")
+  (IS_STARPAY ? "https://api-app.starpay.uz" : "https://api.yulduzpay.uz")
 ).replace(/\/+$/, "");
 const BOT_URL = (import.meta.env.VITE_BOT_URL || "").replace(
   /^https?:\/\/(?:www\.)?t\.me\//i,
