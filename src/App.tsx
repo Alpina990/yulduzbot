@@ -26,7 +26,7 @@ export default function App() {
       <div className="yp-grid-bg absolute inset-0 pointer-events-none" />
 
       {/* Main mobile container — scrollsiz, compact */}
-      <div className="relative z-10 w-full max-w-[420px] min-h-[100dvh] sm:min-h-0 sm:h-[860px] flex flex-col mx-auto px-5 sm:px-6 py-6 sm:py-9 sm:rounded-[2.5rem] sm:bg-white/60 sm:backdrop-blur-xl sm:border sm:border-[#2AABEE]/15 sm:shadow-[0_30px_80px_-20px_rgba(42,171,238,0.25)]">
+      <main className="relative z-10 w-full max-w-[420px] min-h-[100dvh] sm:min-h-0 sm:h-[860px] flex flex-col mx-auto px-5 sm:px-6 py-6 sm:py-9 sm:rounded-[2.5rem] sm:bg-white/60 sm:backdrop-blur-xl sm:border sm:border-[#2AABEE]/15 sm:shadow-[0_30px_80px_-20px_rgba(42,171,238,0.25)]">
 
         {/* ───────── 1. Header ───────── */}
         <header className="relative flex justify-center items-center w-full entrance-fade-up" style={{ animationDelay: '0ms' }}>
@@ -174,7 +174,7 @@ export default function App() {
           ))}
         </footer>
 
-      </div>
+      </main>
     </div>
   );
 }
