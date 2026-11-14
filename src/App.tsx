@@ -8,8 +8,10 @@ const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || 'YulduzPay';
 const LOGO_PATH = `/${BRAND_NAME.toLowerCase()}_icon.png`;
 const IS_STARPAY = BRAND_NAME.replace(/[\s_-]/g, '').toLowerCase() === 'starpay';
 const GIFTS_URL = IS_STARPAY ? '/gift/' : BOT_URL;
-// Legal pages (src/legal), filled from each brand's own Admin (Documents).
-const FOOTER_LINKS = [['Narxlar', '/prices'], ['Kelishuv', '/terms'], ['Maxfiylik', '/privacy'], ['Yordam', '/support']];
+// StarPay's legal pages live here (src/legal); YulduzPay's are its own, in the mini app.
+const FOOTER_LINKS = IS_STARPAY
+  ? [['Narxlar', '/prices'], ['Kelishuv', '/terms'], ['Maxfiylik', '/privacy'], ['Yordam', '/support']]
+  : [['Kelishuv', 'https://app.yulduzpay.uz/terms?lang=uz'], ['Maxfiylik', 'https://app.yulduzpay.uz/privacy?lang=uz']];
 
 export default function App() {
   return (

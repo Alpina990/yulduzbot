@@ -10,7 +10,9 @@ const render = (node: ReactNode) =>
 if (window.location.pathname === '/gift') {
   window.location.replace(`/gift/${window.location.search}${window.location.hash}`);
 } else {
-  const legalPage = legalPageFromPath(window.location.pathname);
+  // Only StarPay serves these pages; YulduzPay's legal pages are in its mini app (app.yulduzpay.uz).
+  const isStarPay = (import.meta.env.VITE_BRAND_NAME || '').replace(/[\s_-]/g, '').toLowerCase() === 'starpay';
+  const legalPage = isStarPay ? legalPageFromPath(window.location.pathname) : null;
   if (legalPage) {
     // The legal pages are their own chunk; the landing page does not download them.
     import('./legal/LegalPage.tsx').then(({ default: LegalPage }) => render(<LegalPage page={legalPage} />));
