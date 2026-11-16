@@ -28,6 +28,23 @@
     if (pixelIds.length) fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
+    <!-- Buzzi Stats: one build serves yulduzpay.uz and starpay.uz, so the site id is picked by hostname. -->
+    <script>
+    (function () {
+      var ids = { "yulduzpay.uz": "bf258784-eb06-4282-b463-bb3c29cb53cc", "starpay.uz": "f8182947-4460-443a-b19d-f09111e3260b" };
+      var id = ids[location.hostname.replace(/^www\./, "")];
+      if (!id) return;
+      var s = document.createElement("script");
+      s.src = "https://stats.buzzi.uz/script.js";
+      s.setAttribute("data-website-id", id);
+      s.setAttribute("data-performance", "true");
+      s.setAttribute("data-exclude-hash", "true");
+      document.head.appendChild(s);
+      var c = document.createElement("script");
+      c.src = "https://stats.buzzi.uz/clicks.js";
+      document.head.appendChild(c);
+    })();
+    </script>
   </head>
   <body>
     <noscript>%META_PIXEL_NOSCRIPT%</noscript>
