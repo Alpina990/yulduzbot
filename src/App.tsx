@@ -1,4 +1,6 @@
 import { ArrowRight, CreditCard } from 'lucide-react';
+import { useEffect } from 'react';
+import { trackBotLinks } from './adVisit';
 import LazyLottie from './LazyLottie';
 
 const BOT_URL = (
@@ -19,6 +21,9 @@ const FOOTER_LINKS = IS_STARPAY
     ];
 
 export default function App() {
+  // YulduzPay only: StarPay's bot runs on StarPay's backend.
+  useEffect(() => (IS_STARPAY ? undefined : trackBotLinks()), []);
+
   return (
     <div className="min-h-[100dvh] w-full bg-gradient-to-b from-[#EAF4FB] via-[#F4F9FC] to-[#FFFFFF] flex flex-col items-center justify-center font-sans text-[#0F1B2A] selection:bg-[#2AABEE]/20 relative overflow-hidden">
 
