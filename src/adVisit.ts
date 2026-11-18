@@ -11,11 +11,18 @@ function cookie(name: string): string {
   return entry ? decodeURIComponent(entry.slice(name.length + 1)) : '';
 }
 
-// The pixel writes _fbc from fbclid only once it has loaded; a quick tap may come first.
+// The pixel writes _fbc from fbclid only once it has loaded; a quick tap may come first, and an older
+// _fbc from an earlier ad click must not win over the click that brought this visit.
 function clickId(): string {
   const fbclid = new URLSearchParams(window.location.search).get('fbclid');
-  return cookie('_fbc') || (fbclid ? `fb.1.${LANDED_AT}.${fbclid}` : '');
+  const saved = cookie('_fbc');
+  if (!fbclid) return saved;
+  return saved.endsWith(`.${fbclid}`) ? saved : `fb.1.${LANDED_AT}.${fbclid}`;
 }
+
+// Start codes the bot acts on keep their meaning: a campaign (src_), a referral (ref_), a giveaway invite (gw_).
+// Any other code (production has a placeholder) is free to replace.
+const MEANINGFUL_START = /^(src|ref|gw)_/;
 
 function randomCode(): string {
   return Array.from(crypto.getRandomValues(new Uint8Array(20)), (b) => CODE_ALPHABET[b % CODE_ALPHABET.length]).join('');
@@ -27,10 +34,11 @@ export function trackBotLinks(): () => void {
     const target = event.target instanceof Element ? event.target : null;
     const link = target?.closest<HTMLAnchorElement>('a[href*="telegram.dog/"], a[href*="t.me/"]');
     if (!link) return;
+    const url = new URL(link.href);
+    if (MEANINGFUL_START.test(url.searchParams.get('start') ?? '')) return;
     const fbc = clickId();
     const fbp = cookie('_fbp');
     if (!fbc && !fbp) return;
-    const url = new URL(link.href);
     url.searchParams.set('start', `ad_${code}`);
     link.href = url.toString();
     const body = new URLSearchParams({ code, url: `${window.location.origin}${window.location.pathname}` });
